@@ -22,14 +22,14 @@ export default function NavigationBar() {
               className={activeLink === "/explore" ? "active" : ""}
               onClick={() => handleLinkClick("/explore")}
             >
-              키트 둘러보기
+              킷 둘러보기
             </a>
             <a
               href="/create"
               className={activeLink === "/create" ? "active" : ""}
               onClick={() => handleLinkClick("/create")}
             >
-              키트 만들기
+              킷 만들기
             </a>
             <a
               href="/community"
