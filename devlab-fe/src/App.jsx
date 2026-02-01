@@ -1,13 +1,15 @@
-import { Router } from 'react-router-dom'
-import './App.css'
-import './components/Navigation'
-import NavigationBar from './components/Navigation'
+import "./App.css";
+import "./components/Navigation";
+import NavigationBar from "./components/Navigation";
+import Hero from "./components/Hero";
 
 function App() {
-
   return (
-    <NavigationBar/>
-  )
+    <>
+      <NavigationBar />
+      <Hero />
+    </>
+  );
 }
 
-export default App
+export default App;
