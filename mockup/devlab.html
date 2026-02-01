@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevLab - Project-Based Learning Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B35;
+            --secondary: #004E89;
+            --accent: #FFD23F;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+            --success: #06D6A0;
+            --grid-bg: #FAFBFC;
+            --shadow: rgba(0, 78, 137, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Work Sans', sans-serif;
+            background: var(--grid-bg);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* Animated Grid Background */
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(var(--secondary) 1px, transparent 1px),
+                linear-gradient(90deg, var(--secondary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.03;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid var(--primary);
+            box-shadow: 0 4px 20px var(--shadow);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: '</>';
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 0.95rem;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: #E55A2B;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--secondary);
+            border: 2px solid var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1400px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .hero-content h1 .highlight {
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .hero-content h1 .highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 12px;
+            background: var(--accent);
+            opacity: 0.4;
+            z-index: -1;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .code-window {
+            background: var(--dark);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            font-family: 'Space Mono', monospace;
+            color: var(--success);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .code-window::before {
+            content: '● ● ●';
+            display: block;
+            color: #555;
+            margin-bottom: 1rem;
+            letter-spacing: 5px;
+        }
+
+        /* Stats Section */
+        .stats {
+            max-width: 1400px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            color: #666;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        /* Featured Kits Section */
+        .section {
+            max-width: 1400px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: var(--secondary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 80%;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        .kits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .kit-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px var(--shadow);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            animation: fadeInUp 0.8s ease;
+            animation-fill-mode: both;
+        }
+
+        .kit-card:nth-child(1) { animation-delay: 0.1s; }
+        .kit-card:nth-child(2) { animation-delay: 0.2s; }
+        .kit-card:nth-child(3) { animation-delay: 0.3s; }
+        .kit-card:nth-child(4) { animation-delay: 0.4s; }
+        .kit-card:nth-child(5) { animation-delay: 0.5s; }
+        .kit-card:nth-child(6) { animation-delay: 0.6s; }
+
+        .kit-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px var(--shadow);
+        }
+
+        .kit-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kit-image::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.05) 10px,
+                rgba(255, 255, 255, 0.05) 20px
+            );
+            animation: slidePattern 20s linear infinite;
+        }
+
+        @keyframes slidePattern {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .kit-content {
+            padding: 1.5rem;
+        }
+
+        .kit-tag {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            background: rgba(255, 107, 53, 0.1);
+            color: var(--primary);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .kit-title {
+            font-size: 1.4rem;
+            color: var(--dark);
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .kit-description {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .kit-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        .kit-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            font-family: 'Space Mono', monospace;
+        }
+
+        .kit-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+        }
+
+        /* Categories */
+        .categories {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .category-btn {
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--secondary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 4rem 2rem 2rem;
+            margin-top: 6rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            text-align: center;
+            color: #888;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .kits-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-background"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">DevLab</div>
+            <ul class="nav-links">
+                <li><a href="#explore">Explore Kits</a></li>
+                <li><a href="#create">Create Kit</a></li>
+                <li><a href="#community">Community</a></li>
+                <li><a href="#docs">Docs</a></li>
+                <li><a href="#signin" class="btn btn-secondary">Sign In</a></li>
+                <li><a href="#signup" class="btn btn-primary">Get Started</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Master Coding Through <span class="highlight">Real Projects</span></h1>
+            <p>Buy and sell project-based learning kits designed by expert developers. Learn by building, not just watching.</p>
+            <div class="hero-actions">
+                <a href="#explore" class="btn btn-primary">Explore Kits</a>
+                <a href="#create" class="btn btn-secondary">Sell Your Kit</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="code-window">
+function learnByDoing() {<br>
+&nbsp;&nbsp;const project = selectKit();<br>
+&nbsp;&nbsp;const skills = build(project);<br>
+&nbsp;&nbsp;<br>
+&nbsp;&nbsp;return {<br>
+&nbsp;&nbsp;&nbsp;&nbsp;knowledge: "practical",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;portfolio: "impressive",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;confidence: "high"<br>
+&nbsp;&nbsp;};<br>
+}
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="stat-card">
+            <div class="stat-number">2,500+</div>
+            <div class="stat-label">Project Kits</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Active Learners</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">1,200+</div>
+            <div class="stat-label">Expert Creators</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Success Rate</div>
+        </div>
+    </section>
+
+    <!-- Featured Kits -->
+    <section class="section">
+        <div class="section-header">
+            <h2 class="section-title">Featured Kits</h2>
+            <a href="#all" class="btn btn-secondary">View All</a>
+        </div>
+
+        <div class="categories">
+            <button class="category-btn active">All</button>
+            <button class="category-btn">Web Development</button>
+            <button class="category-btn">Mobile Apps</button>
+            <button class="category-btn">Data Science</button>
+            <button class="category-btn">Machine Learning</button>
+            <button class="category-btn">Game Development</button>
+        </div>
+
+        <div class="kits-grid">
+            <div class="kit-card">
+                <div class="kit-image">🚀</div>
+                <div class="kit-content">
+                    <div class="kit-tag">Web Development</div>
+                    <h3 class="kit-title">Build a Real-Time Chat App</h3>
+                    <p class="kit-description">Master WebSockets, Node.js, and React by building a production-ready chat application with authentication and real-time messaging.</p>
+                    <div class="kit-footer">
+                        <div class="kit-price">$49</div>
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span>Sarah Chen</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-image">📱</div>
+                <div class="kit-content">
+                    <div class="kit-tag">Mobile Apps</div>
+                    <h3 class="kit-title">iOS Fitness Tracker</h3>
+                    <p class="kit-description">Learn Swift and HealthKit by creating a comprehensive fitness tracking app with data visualization and workout planning.</p>
+                    <div class="kit-footer">
+                        <div class="kit-price">$65</div>
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span>Mike Johnson</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-image">🤖</div>
+                <div class="kit-content">
+                    <div class="kit-tag">Machine Learning</div>
+                    <h3 class="kit-title">Image Classification ML Model</h3>
+                    <p class="kit-description">Build and deploy a CNN model using TensorFlow. Learn data preprocessing, model training, and deployment strategies.</p>
+                    <div class="kit-footer">
+                        <div class="kit-price">$89</div>
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span>Alex Rivera</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-image">🎮</div>
+                <div class="kit-content">
+                    <div class="kit-tag">Game Development</div>
+                    <h3 class="kit-title">2D Platformer in Unity</h3>
+                    <p class="kit-description">Create a complete 2D platformer game with physics, animations, level design, and enemy AI using Unity and C#.</p>
+                    <div class="kit-footer">
+                        <div class="kit-price">$55</div>
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span>Emma Davis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-image">📊</div>
+                <div class="kit-content">
+                    <div class="kit-tag">Data Science</div>
+                    <h3 class="kit-title">Sales Analytics Dashboard</h3>
+                    <p class="kit-description">Build an interactive analytics dashboard using Python, Pandas, and Plotly. Learn data cleaning, analysis, and visualization.</p>
+                    <div class="kit-footer">
+                        <div class="kit-price">$45</div>
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span>David Lee</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-image">🔐</div>
+                <div class="kit-content">
+                    <div class="kit-tag">Backend</div>
+                    <h3 class="kit-title">Secure REST API with Auth</h3>
+                    <p class="kit-description">Master backend development by building a secure RESTful API with JWT authentication, rate limiting, and database integration.</p>
+                    <div class="kit-footer">
+                        <div class="kit-price">$59</div>
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span>Jessica Park</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About DevLab</h3>
+                <p style="color: #ccc; line-height: 1.7;">The premier marketplace for project-based coding education. Learn through doing, teach through sharing.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Platform</h3>
+                <ul>
+                    <li><a href="#">Explore Kits</a></li>
+                    <li><a href="#">Create a Kit</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">For Teams</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#">Documentation</a></li>
+                    <li><a href="#">Community</a></li>
+                    <li><a href="#">Blog</a></li>
+                    <li><a href="#">Support</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DevLab. All rights reserved. Built with ❤️ for developers.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Category filter functionality
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
