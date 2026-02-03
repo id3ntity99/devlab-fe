@@ -47,7 +47,7 @@ export default function NavigationBar() {
             </a>
           </div>
           <div className="nav-right">
-            <a href="/login" className="btn btn-next">
+            <a href="/login" className="btn btn-text">
               로그인
             </a>
             <a href="/signup" className="btn btn-primary">

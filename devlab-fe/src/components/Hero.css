@@ -135,6 +135,8 @@
   box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
   overflow: hidden;
   border: 1px solid var(--gray-200);
+  will-change: transform;
+  animation: floatY 3s linear infinite;
 }
 
 .browser-header {
@@ -197,6 +199,24 @@
   }
 }
 
+@keyframes floatY {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  75% {
+    transform: translateY(5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
 .code-snippet {
   font-family: "Courier New", monospace;
   color: white;
@@ -204,44 +224,4 @@
   line-height: 1.8;
   position: relative;
   z-index: 1;
-}
-
-/* Section Container */
-.section {
-  padding: 80px 24px;
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 60px;
-}
-
-.section-badge {
-  display: inline-block;
-  background: var(--gray-100);
-  color: var(--primary);
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.section-title {
-  font-size: 40px;
-  font-weight: 900;
-  color: var(--gray-800);
-  margin-bottom: 16px;
-  letter-spacing: -0.5px;
-}
-
-.section-description {
-  font-size: 18px;
-  color: #6b7280;
-  max-width: 600px;
-  margin: 0 auto;
 }

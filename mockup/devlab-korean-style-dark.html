@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevLab - 프로젝트 기반 코딩 학습 플랫폼 (Dark Mode)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #818CF8;
+            --primary-dark: #6366F1;
+            --primary-light: #A5B4FC;
+            --secondary: #34D399;
+            --accent: #FBBF24;
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-tertiary: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --border: #334155;
+            --border-light: #475569;
+            --success: #34D399;
+            --danger: #F87171;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Navigation - Dark Mode */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary) 0%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-center a {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 15px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        .nav-center a:hover {
+            color: var(--primary-light);
+        }
+
+        .nav-center a.active {
+            color: var(--primary-light);
+        }
+
+        .nav-center a.active::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .btn-text {
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            padding: 10px 16px;
+        }
+
+        .btn-text:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(129, 140, 248, 0.4);
+        }
+
+        /* Hero Section - Dark Mode */
+        .hero {
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+            padding: 80px 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(129, 140, 248, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            animation: fadeInLeft 0.8s ease;
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(129, 140, 248, 0.15);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            color: var(--primary-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .hero-title {
+            font-size: 52px;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+        }
+
+        .hero-title .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+        }
+
+        .btn-large {
+            padding: 16px 32px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-light);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 32px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 900;
+            color: var(--primary-light);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        .hero-visual {
+            position: relative;
+            animation: fadeInRight 0.8s ease;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .mockup-browser {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .browser-header {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .browser-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #EF4444;
+        }
+
+        .browser-dot:nth-child(2) {
+            background: #F59E0B;
+        }
+
+        .browser-dot:nth-child(3) {
+            background: #10B981;
+        }
+
+        .browser-content {
+            padding: 32px;
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .browser-content::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.8;
+            }
+        }
+
+        .code-snippet {
+            font-family: 'Courier New', monospace;
+            color: var(--primary-light);
+            font-size: 14px;
+            line-height: 1.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Section Container */
+        .section {
+            padding: 80px 24px;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: rgba(129, 140, 248, 0.15);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            color: var(--primary-light);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            letter-spacing: -0.5px;
+        }
+
+        .section-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Category Tabs - Dark Mode */
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 40px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .category-tab {
+            padding: 12px 24px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+
+        .category-tab:hover {
+            border-color: var(--primary);
+            color: var(--primary-light);
+            background: rgba(129, 140, 248, 0.1);
+        }
+
+        .category-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Kit Cards - Dark Mode */
+        .kits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .kit-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .kit-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--primary);
+            border-color: var(--primary);
+        }
+
+        .kit-thumbnail {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 64px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kit-thumbnail::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.4) 100%);
+        }
+
+        .kit-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            color: var(--primary-light);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            z-index: 1;
+            border: 1px solid rgba(129, 140, 248, 0.3);
+        }
+
+        .kit-body {
+            padding: 20px;
+        }
+
+        .kit-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            line-height: 1.4;
+        }
+
+        .kit-description {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .kit-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .kit-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .author-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #A78BFA);
+        }
+
+        .author-name {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .kit-price {
+            font-size: 22px;
+            font-weight: 900;
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .kit-price .currency {
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .kit-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .star {
+            color: #FBBF24;
+            font-size: 14px;
+        }
+
+        .rating-count {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        /* Features Section - Dark Mode */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            padding: 32px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, #A78BFA 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .feature-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .feature-description {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section - Dark Mode */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(129, 140, 248, 0.2) 0%, rgba(167, 139, 250, 0.2) 100%);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 80px 24px;
+            margin: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -250px;
+            right: -250px;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-title {
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .cta-description {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 36px;
+            line-height: 1.7;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--bg-primary);
+        }
+
+        .btn-white:hover {
+            background: var(--text-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Footer - Dark Mode */
+        footer {
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            padding: 60px 24px 32px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .footer-brand {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--primary-light) 0%, #A78BFA 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-description {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        .footer-section h4 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .footer-copyright {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-copyright a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+
+        .footer-copyright a:hover {
+            color: var(--primary-light);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .hero-stats {
+                justify-content: center;
+            }
+
+            .kits-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-center {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .kits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">DevLab</div>
+            <div class="nav-center">
+                <a href="#explore" class="active">킷 둘러보기</a>
+                <a href="#create">킷 만들기</a>
+                <a href="#community">커뮤니티</a>
+                <a href="#pricing">요금제</a>
+            </div>
+            <div class="nav-right">
+                <a href="#login" class="btn btn-text">로그인</a>
+                <a href="#signup" class="btn btn-primary">시작하기</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    🚀 새로운 학습 경험
+                </div>
+                <h1 class="hero-title">
+                    실전 프로젝트로<br>
+                    <span class="gradient-text">코딩 마스터하기</span>
+                </h1>
+                <p class="hero-description">
+                    전문 개발자들이 만든 프로젝트 기반 학습 킷을 구매하고 판매하세요. 
+                    영상 강의가 아닌, 직접 만들며 배우는 진짜 학습을 경험하세요.
+                </p>
+                <div class="hero-actions">
+                    <a href="#explore" class="btn btn-primary btn-large">킷 둘러보기</a>
+                    <a href="#create" class="btn btn-outline btn-large">킷 판매하기</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">2,500+</div>
+                        <div class="stat-label">프로젝트 킷</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50,000+</div>
+                        <div class="stat-label">수강생</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">95%</div>
+                        <div class="stat-label">만족도</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="mockup-browser">
+                    <div class="browser-header">
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                        <div class="browser-dot"></div>
+                    </div>
+                    <div class="browser-content">
+                        <div class="code-snippet">
+const learningPath = {<br>
+&nbsp;&nbsp;step1: "프로젝트 선택",<br>
+&nbsp;&nbsp;step2: "직접 구현",<br>
+&nbsp;&nbsp;step3: "실력 향상",<br>
+&nbsp;&nbsp;result: "취업 성공 ✨"<br>
+};
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Kits Section -->
+    <section class="section">
+        <div class="section-header">
+            <div class="section-badge">FEATURED KITS</div>
+            <h2 class="section-title">인기 프로젝트 킷</h2>
+            <p class="section-description">
+                검증된 크리에이터들이 만든 고퀄리티 프로젝트 학습 킷을 만나보세요
+            </p>
+        </div>
+
+        <div class="category-tabs">
+            <button class="category-tab active">전체</button>
+            <button class="category-tab">웹 개발</button>
+            <button class="category-tab">모바일 앱</button>
+            <button class="category-tab">데이터 사이언스</button>
+            <button class="category-tab">머신러닝</button>
+            <button class="category-tab">게임 개발</button>
+            <button class="category-tab">백엔드</button>
+        </div>
+
+        <div class="kits-grid">
+            <div class="kit-card">
+                <div class="kit-thumbnail" style="background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);">
+                    <div class="kit-badge">웹 개발</div>
+                    🚀
+                </div>
+                <div class="kit-body">
+                    <div class="kit-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="rating-count">(324)</span>
+                    </div>
+                    <h3 class="kit-title">실시간 채팅 앱 만들기</h3>
+                    <p class="kit-description">
+                        WebSocket, Node.js, React를 활용해 실무급 실시간 채팅 애플리케이션을 구현합니다
+                    </p>
+                    <div class="kit-meta">
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">김개발</span>
+                        </div>
+                        <div class="kit-price">
+                            <span class="currency">₩</span>49,000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-thumbnail" style="background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);">
+                    <div class="kit-badge">모바일 앱</div>
+                    📱
+                </div>
+                <div class="kit-body">
+                    <div class="kit-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="rating-count">(187)</span>
+                    </div>
+                    <h3 class="kit-title">iOS 피트니스 트래커</h3>
+                    <p class="kit-description">
+                        Swift와 HealthKit을 활용한 운동 기록 및 데이터 시각화 앱 개발
+                    </p>
+                    <div class="kit-meta">
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">박앱개발</span>
+                        </div>
+                        <div class="kit-price">
+                            <span class="currency">₩</span>65,000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-thumbnail" style="background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);">
+                    <div class="kit-badge">머신러닝</div>
+                    🤖
+                </div>
+                <div class="kit-body">
+                    <div class="kit-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="rating-count">(256)</span>
+                    </div>
+                    <h3 class="kit-title">이미지 분류 ML 모델</h3>
+                    <p class="kit-description">
+                        TensorFlow를 활용한 CNN 모델 구축부터 배포까지 전 과정 학습
+                    </p>
+                    <div class="kit-meta">
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">이데이터</span>
+                        </div>
+                        <div class="kit-price">
+                            <span class="currency">₩</span>89,000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-thumbnail" style="background: linear-gradient(135deg, #FA709A 0%, #FEE140 100%);">
+                    <div class="kit-badge">게임 개발</div>
+                    🎮
+                </div>
+                <div class="kit-body">
+                    <div class="kit-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="rating-count">(412)</span>
+                    </div>
+                    <h3 class="kit-title">Unity 2D 플랫포머 게임</h3>
+                    <p class="kit-description">
+                        Unity와 C#으로 만드는 완성도 높은 2D 플랫포머 게임 프로젝트
+                    </p>
+                    <div class="kit-meta">
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">최게임</span>
+                        </div>
+                        <div class="kit-price">
+                            <span class="currency">₩</span>55,000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-thumbnail" style="background: linear-gradient(135deg, #30CFD0 0%, #330867 100%);">
+                    <div class="kit-badge">데이터 사이언스</div>
+                    📊
+                </div>
+                <div class="kit-body">
+                    <div class="kit-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="rating-count">(198)</span>
+                    </div>
+                    <h3 class="kit-title">매출 분석 대시보드</h3>
+                    <p class="kit-description">
+                        Python, Pandas, Plotly를 활용한 인터랙티브 데이터 분석 대시보드
+                    </p>
+                    <div class="kit-meta">
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">정분석</span>
+                        </div>
+                        <div class="kit-price">
+                            <span class="currency">₩</span>45,000
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="kit-card">
+                <div class="kit-thumbnail" style="background: linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%);">
+                    <div class="kit-badge">백엔드</div>
+                    🔐
+                </div>
+                <div class="kit-body">
+                    <div class="kit-rating">
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="star">★</span>
+                        <span class="rating-count">(289)</span>
+                    </div>
+                    <h3 class="kit-title">보안 REST API 구축</h3>
+                    <p class="kit-description">
+                        JWT 인증, Rate Limiting 등을 적용한 안전한 REST API 개발
+                    </p>
+                    <div class="kit-meta">
+                        <div class="kit-author">
+                            <div class="author-avatar"></div>
+                            <span class="author-name">강백엔드</span>
+                        </div>
+                        <div class="kit-price">
+                            <span class="currency">₩</span>59,000
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" style="background: rgba(30, 41, 59, 0.5); margin: 80px 0; padding: 80px 24px;">
+        <div style="max-width: 1280px; margin: 0 auto;">
+            <div class="section-header">
+                <div class="section-badge">WHY DEVLAB</div>
+                <h2 class="section-title">왜 DevLab인가요?</h2>
+                <p class="section-description">
+                    프로젝트 기반 학습으로 실무 역량을 키우세요
+                </p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3 class="feature-title">실전 중심 학습</h3>
+                    <p class="feature-description">
+                        이론만 배우는 것이 아닌, 실제 프로젝트를 직접 만들며 배웁니다. 포트폴리오도 자연스럽게 완성됩니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">검증된 크리에이터</h3>
+                    <p class="feature-description">
+                        현직 개발자와 전문가들이 만든 고퀄리티 프로젝트 킷으로 확실한 학습 효과를 보장합니다.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="feature-title">커리어 성장</h3>
+                    <p class="feature-description">
+                        완성한 프로젝트는 당신의 포트폴리오가 되어 취업과 이직에 큰 도움이 됩니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-container">
+            <h2 class="cta-title">지금 바로 시작하세요</h2>
+            <p class="cta-description">
+                2,500개 이상의 프로젝트 킷이 여러분을 기다리고 있습니다.<br>
+                오늘부터 실전 프로젝트로 실력을 키워보세요.
+            </p>
+            <div style="display: flex; gap: 12px; justify-content: center;">
+                <a href="#signup" class="btn btn-white btn-large">무료로 시작하기</a>
+                <a href="#explore" class="btn btn-outline btn-large">킷 둘러보기</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-top">
+                <div>
+                    <div class="footer-brand">DevLab</div>
+                    <p class="footer-description">
+                        프로젝트 기반 코딩 교육의 선두주자<br>
+                        실전으로 배우고, 경험으로 성장하세요
+                    </p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link">f</a>
+                        <a href="#" class="social-link">T</a>
+                        <a href="#" class="social-link">in</a>
+                        <a href="#" class="social-link">Y</a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>플랫폼</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">킷 둘러보기</a></li>
+                        <li><a href="#">킷 만들기</a></li>
+                        <li><a href="#">요금제</a></li>
+                        <li><a href="#">기업용</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>지원</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">도움말 센터</a></li>
+                        <li><a href="#">커뮤니티</a></li>
+                        <li><a href="#">블로그</a></li>
+                        <li><a href="#">문의하기</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>회사</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">회사 소개</a></li>
+                        <li><a href="#">채용</a></li>
+                        <li><a href="#">파트너십</a></li>
+                        <li><a href="#">언론 보도</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <span>© 2026 DevLab. All rights reserved.</span>
+                    <a href="#">이용약관</a>
+                    <a href="#">개인정보처리방침</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Category tabs functionality
+        const categoryTabs = document.querySelectorAll('.category-tab');
+        categoryTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                categoryTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
