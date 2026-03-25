@@ -1,5 +1,4 @@
 import "./App.css";
-import "./components/Navigation";
 import NavigationBar from "./components/Navigation";
 import Hero from "./components/Hero";
 import Features from "./components/Features";

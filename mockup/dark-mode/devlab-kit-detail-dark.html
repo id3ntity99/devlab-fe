@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevLab - 실시간 채팅 앱 만들기</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #818CF8;
+            --primary-dark: #6366F1;
+            --secondary: #34D399;
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-tertiary: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --border: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        /* Navigation */
+        nav {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #A78BFA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 32px;
+        }
+
+        /* Left Column */
+        .main-content {
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .kit-hero {
+            background: linear-gradient(135deg, #667EEA, #764BA2);
+            border-radius: 16px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 120px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kit-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent, rgba(0,0,0,0.3));
+        }
+
+        .hero-badge {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            z-index: 1;
+        }
+
+        /* Kit Header */
+        .kit-header {
+            margin-bottom: 32px;
+        }
+
+        .kit-title {
+            font-size: 36px;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .kit-meta {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .author-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .author-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #A78BFA);
+        }
+
+        .author-details h4 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .author-details p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .rating-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .stars {
+            color: #FBBF24;
+            font-size: 16px;
+        }
+
+        .rating-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .rating-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 32px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 32px;
+        }
+
+        .tab {
+            padding: 12px 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            color: var(--text-primary);
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Content Sections */
+        .section {
+            margin-bottom: 48px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .section-content {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .section-content p {
+            margin-bottom: 16px;
+        }
+
+        .section-content ul {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .section-content li {
+            margin-bottom: 8px;
+        }
+
+        /* Tech Stack */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tech-tag {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Curriculum */
+        .curriculum-list {
+            list-style: none;
+        }
+
+        .curriculum-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .curriculum-item:hover {
+            border-color: var(--primary);
+        }
+
+        .curriculum-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .curriculum-title {
+            font-size: 16px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .lesson-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        /* Reviews */
+        .review-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 16px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-info {
+            display: flex;
+            gap: 12px;
+        }
+
+        .reviewer-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), #A78BFA);
+        }
+
+        .reviewer-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .review-date {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .review-rating {
+            color: #FBBF24;
+        }
+
+        .review-text {
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 96px;
+            height: fit-content;
+        }
+
+        .purchase-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .price-section {
+            margin-bottom: 24px;
+        }
+
+        .current-price {
+            font-size: 40px;
+            font-weight: 900;
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .currency {
+            font-size: 24px;
+        }
+
+        .original-price {
+            font-size: 18px;
+            color: var(--text-muted);
+            text-decoration: line-through;
+            margin-left: 12px;
+        }
+
+        .discount-badge {
+            display: inline-block;
+            background: #EF4444;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+
+        .btn-large {
+            width: 100%;
+            padding: 16px;
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .includes-list {
+            list-style: none;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .includes-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .check-icon {
+            color: var(--secondary);
+            font-size: 18px;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .info-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">DevLab</div>
+            <div>
+                <a href="#" class="btn btn-primary">내 학습</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="content-grid">
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Hero Image -->
+                <div class="kit-hero">
+                    <div class="hero-badge">웹 개발</div>
+                    🚀
+                </div>
+
+                <!-- Kit Header -->
+                <div class="kit-header">
+                    <h1 class="kit-title">실시간 채팅 앱 만들기</h1>
+                    <div class="kit-meta">
+                        <div class="author-info">
+                            <div class="author-avatar"></div>
+                            <div class="author-details">
+                                <h4>김개발</h4>
+                                <p>시니어 풀스택 개발자</p>
+                            </div>
+                        </div>
+                        <div class="rating-badge">
+                            <span class="stars">★★★★★</span>
+                            <span class="rating-text">4.9</span>
+                            <span class="rating-count">(324개 평가)</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span>👥</span>
+                            <span>1,234명 수강</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span>🕐</span>
+                            <span>최근 업데이트: 2026.01</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs">
+                    <div class="tab active">개요</div>
+                    <div class="tab">커리큘럼</div>
+                    <div class="tab">리뷰</div>
+                    <div class="tab">강사</div>
+                </div>
+
+                <!-- Overview Section -->
+                <div class="section">
+                    <h2 class="section-title">프로젝트 소개</h2>
+                    <div class="section-content">
+                        <p>
+                            이 프로젝트에서는 WebSocket을 활용한 실시간 채팅 애플리케이션을 처음부터 끝까지 구현합니다. 
+                            단순한 메시지 전송을 넘어, 실무에서 필요한 사용자 인증, 채팅방 관리, 파일 전송, 읽음 표시 등의 
+                            기능을 모두 구현하며 실전 감각을 키울 수 있습니다.
+                        </p>
+                        <p>
+                            Node.js와 Socket.io를 활용한 백엔드 구축부터, React를 사용한 인터랙티브한 UI 개발까지 
+                            풀스택 개발의 전 과정을 경험하실 수 있습니다.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- What You'll Learn -->
+                <div class="section">
+                    <h2 class="section-title">학습 내용</h2>
+                    <div class="section-content">
+                        <ul>
+                            <li>WebSocket과 Socket.io를 활용한 실시간 통신 구현</li>
+                            <li>JWT를 활용한 사용자 인증 시스템 구축</li>
+                            <li>React Hooks를 활용한 상태 관리</li>
+                            <li>MongoDB를 활용한 채팅 기록 저장</li>
+                            <li>파일 업로드 및 이미지 공유 기능</li>
+                            <li>읽음 표시 및 타이핑 인디케이터 구현</li>
+                            <li>반응형 UI 디자인</li>
+                            <li>Docker를 활용한 배포</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Tech Stack -->
+                <div class="section">
+                    <h2 class="section-title">사용 기술</h2>
+                    <div class="tech-stack">
+                        <div class="tech-tag">React</div>
+                        <div class="tech-tag">Node.js</div>
+                        <div class="tech-tag">Socket.io</div>
+                        <div class="tech-tag">MongoDB</div>
+                        <div class="tech-tag">Express</div>
+                        <div class="tech-tag">JWT</div>
+                        <div class="tech-tag">Docker</div>
+                        <div class="tech-tag">Tailwind CSS</div>
+                    </div>
+                </div>
+
+                <!-- Curriculum -->
+                <div class="section">
+                    <h2 class="section-title">커리큘럼</h2>
+                    <ul class="curriculum-list">
+                        <li class="curriculum-item">
+                            <div class="curriculum-header">
+                                <div class="curriculum-title">
+                                    <span>01</span>
+                                    <span>프로젝트 소개 및 환경 설정</span>
+                                </div>
+                                <span class="lesson-count">5개 레슨 · 45분</span>
+                            </div>
+                        </li>
+                        <li class="curriculum-item">
+                            <div class="curriculum-header">
+                                <div class="curriculum-title">
+                                    <span>02</span>
+                                    <span>백엔드 서버 구축하기</span>
+                                </div>
+                                <span class="lesson-count">8개 레슨 · 1시간 20분</span>
+                            </div>
+                        </li>
+                        <li class="curriculum-item">
+                            <div class="curriculum-header">
+                                <div class="curriculum-title">
+                                    <span>03</span>
+                                    <span>사용자 인증 시스템</span>
+                                </div>
+                                <span class="lesson-count">6개 레슨 · 1시간</span>
+                            </div>
+                        </li>
+                        <li class="curriculum-item">
+                            <div class="curriculum-header">
+                                <div class="curriculum-title">
+                                    <span>04</span>
+                                    <span>실시간 채팅 기능 구현</span>
+                                </div>
+                                <span class="lesson-count">10개 레슨 · 2시간</span>
+                            </div>
+                        </li>
+                        <li class="curriculum-item">
+                            <div class="curriculum-header">
+                                <div class="curriculum-title">
+                                    <span>05</span>
+                                    <span>프론트엔드 UI 개발</span>
+                                </div>
+                                <span class="lesson-count">12개 레슨 · 2시간 30분</span>
+                            </div>
+                        </li>
+                        <li class="curriculum-item">
+                            <div class="curriculum-header">
+                                <div class="curriculum-title">
+                                    <span>06</span>
+                                    <span>고급 기능 추가</span>
+                                </div>
+                                <span class="lesson-count">9개 레슨 · 1시간 45분</span>
+                            </div>
+                        </li>
+                        <li class="curriculum-item">
+                            <div class="curriculum-header">
+                                <div class="curriculum-title">
+                                    <span>07</span>
+                                    <span>배포 및 최적화</span>
+                                </div>
+                                <span class="lesson-count">7개 레슨 · 1시간 30분</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Reviews -->
+                <div class="section">
+                    <h2 class="section-title">수강생 리뷰</h2>
+                    
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar"></div>
+                                <div>
+                                    <div class="reviewer-name">이준호</div>
+                                    <div class="review-date">2주 전</div>
+                                </div>
+                            </div>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        <p class="review-text">
+                            실무에서 바로 써먹을 수 있는 내용들로 가득합니다. 특히 WebSocket 구현 부분이 정말 
+                            자세하게 설명되어 있어서 이해하기 쉬웠어요. 포트폴리오로도 활용할 수 있을 것 같습니다!
+                        </p>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar"></div>
+                                <div>
+                                    <div class="reviewer-name">박지은</div>
+                                    <div class="review-date">1개월 전</div>
+                                </div>
+                            </div>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        <p class="review-text">
+                            강사님의 설명이 정말 명쾌합니다. 복잡할 수 있는 내용을 쉽게 풀어주셔서 초보자도 
+                            충분히 따라할 수 있었어요. 완성된 프로젝트를 면접에서 보여줬더니 좋은 반응을 얻었습니다!
+                        </p>
+                    </div>
+
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="reviewer-info">
+                                <div class="reviewer-avatar"></div>
+                                <div>
+                                    <div class="reviewer-name">최민수</div>
+                                    <div class="review-date">2개월 전</div>
+                                </div>
+                            </div>
+                            <div class="review-rating">★★★★★</div>
+                        </div>
+                        <p class="review-text">
+                            단순히 코드만 따라하는 게 아니라, 왜 이렇게 구현해야 하는지 개념부터 확실하게 
+                            잡아주셔서 너무 좋았습니다. 다른 프로젝트에도 응용할 수 있을 것 같아요.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <!-- Purchase Card -->
+                <div class="purchase-card">
+                    <div class="price-section">
+                        <div>
+                            <span class="current-price">
+                                <span class="currency">₩</span>49,000
+                            </span>
+                            <span class="original-price">₩89,000</span>
+                        </div>
+                        <div class="discount-badge">45% 할인</div>
+                    </div>
+
+                    <button class="btn btn-primary btn-large">지금 시작하기</button>
+                    <button class="btn btn-outline btn-large">장바구니 담기</button>
+
+                    <ul class="includes-list">
+                        <li class="includes-item">
+                            <span class="check-icon">✓</span>
+                            <span>총 12시간 분량의 프로젝트</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="check-icon">✓</span>
+                            <span>완성 코드 및 자료 제공</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="check-icon">✓</span>
+                            <span>Q&A 게시판 이용</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="check-icon">✓</span>
+                            <span>수료증 발급</span>
+                        </li>
+                        <li class="includes-item">
+                            <span class="check-icon">✓</span>
+                            <span>평생 소장</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Info Card -->
+                <div class="info-card">
+                    <h3 class="info-title">프로젝트 정보</h3>
+                    <div class="info-item">
+                        <span class="info-label">난이도</span>
+                        <span class="info-value">중급</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">총 시간</span>
+                        <span class="info-value">12시간</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">레슨 수</span>
+                        <span class="info-value">57개</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">언어</span>
+                        <span class="info-value">한국어</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">자막</span>
+                        <span class="info-value">한국어, 영어</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">최종 업데이트</span>
+                        <span class="info-value">2026.01</span>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+</body>
+</html>

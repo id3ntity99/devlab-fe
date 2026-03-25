@@ -18,16 +18,8 @@ nav {
   align-items: center;
   height: 64px;
 }
-
 .logo {
-  font-family: "Montserrat", sans-serif;
   font-size: 24px;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
 }
 
 .nav-center {
@@ -64,38 +56,10 @@ nav {
   align-items: center;
 }
 
-.btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
-  font-size: 14px;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-}
-
-.btn-text {
-  background: transparent;
-  color: var(--gray-800);
-  border: none;
-  padding: 10px 16px;
-}
-
 .btn-text:hover {
   background: var(--gray-100);
 }
 
-.btn-primary {
-  background: var(--primary);
-  color: white;
-}
-
 .btn-primary:hover {
-  background: var(--primary-dark);
   transform: translateY(-1px);
 }

@@ -64,7 +64,7 @@ export default function Footer() {
             </div>
             <div className="footer-section">
               <h4>회사</h4>
-              <ul class="footer-links">
+              <ul className="footer-links">
                 <li>
                   <a href="#">회사 소개</a>
                 </li>

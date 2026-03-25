@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevLab IDE - 실시간 채팅 앱 만들기</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #818CF8;
+            --primary-dark: #6366F1;
+            --secondary: #34D399;
+            --bg-primary: #0F172A;
+            --bg-secondary: #1E293B;
+            --bg-tertiary: #334155;
+            --text-primary: #F1F5F9;
+            --text-secondary: #CBD5E1;
+            --text-muted: #94A3B8;
+            --border: #334155;
+            --success: #34D399;
+            --warning: #FBBF24;
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            height: 56px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 20px;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), #A78BFA);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .project-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .project-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 18px;
+        }
+
+        .btn-icon:hover {
+            background: var(--bg-primary);
+            border-color: var(--primary);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr 350px;
+            height: calc(100vh - 56px);
+        }
+
+        /* Sidebar - File Explorer */
+        .sidebar {
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-tree {
+            padding: 8px;
+        }
+
+        .file-item, .folder-item {
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            margin-bottom: 2px;
+            transition: all 0.2s;
+        }
+
+        .file-item:hover, .folder-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .file-item.active {
+            background: var(--bg-tertiary);
+            color: var(--primary);
+        }
+
+        .folder-item {
+            font-weight: 600;
+        }
+
+        .file-icon {
+            font-size: 16px;
+        }
+
+        .folder-children {
+            margin-left: 20px;
+        }
+
+        /* Center - Editor */
+        .editor-area {
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-primary);
+        }
+
+        .tabs-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .editor-tab {
+            padding: 12px 20px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .editor-tab:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .editor-tab.active {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .tab-close {
+            margin-left: 8px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .editor-tab:hover .tab-close {
+            opacity: 1;
+        }
+
+        .editor-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .code-editor {
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 20px;
+            border: none;
+            outline: none;
+            resize: none;
+        }
+
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 60px;
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 20px 12px;
+            text-align: right;
+            user-select: none;
+            border-right: 1px solid var(--border);
+        }
+
+        /* Right Sidebar - Instructions & Terminal */
+        .right-sidebar {
+            background: var(--bg-secondary);
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .instruction-panel {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .instruction-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .instruction-title {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .progress-badge {
+            padding: 4px 12px;
+            background: rgba(129, 140, 248, 0.15);
+            border: 1px solid rgba(129, 140, 248, 0.3);
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .step-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .step-number.completed {
+            background: var(--success);
+        }
+
+        .step-title {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .step-content {
+            font-size: 13px;
+            line-height: 1.7;
+            color: var(--text-secondary);
+            margin-left: 40px;
+        }
+
+        .step-content code {
+            background: var(--bg-primary);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--primary);
+        }
+
+        .hint-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 6px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--warning);
+        }
+
+        /* Terminal */
+        .terminal-panel {
+            height: 250px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+        }
+
+        .terminal-header {
+            background: var(--bg-secondary);
+            padding: 8px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terminal-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .terminal-content {
+            height: calc(100% - 40px);
+            padding: 12px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .terminal-line {
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .terminal-line.success {
+            color: var(--success);
+        }
+
+        .terminal-line.error {
+            color: var(--error);
+        }
+
+        .terminal-prompt {
+            color: var(--primary);
+        }
+
+        /* Bottom Bar */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 28px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .status-items {
+            display: flex;
+            gap: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-primary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bg-tertiary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border);
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="logo">DevLab IDE</div>
+        <div class="project-info">
+            <span class="project-title">실시간 채팅 앱 만들기 / Step 3: WebSocket 연결</span>
+        </div>
+        <div class="top-actions">
+            <button class="btn-icon" title="설정">⚙️</button>
+            <button class="btn-icon" title="도움말">?</button>
+            <button class="btn btn-success">✓ 완료하기</button>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Left Sidebar - File Explorer -->
+        <aside class="sidebar">
+            <div class="sidebar-header">프로젝트 파일</div>
+            <div class="file-tree">
+                <div class="folder-item">
+                    📁 chat-app
+                </div>
+                <div class="folder-children">
+                    <div class="folder-item">
+                        📁 client
+                    </div>
+                    <div class="folder-children">
+                        <div class="folder-item">
+                            📁 src
+                        </div>
+                        <div class="folder-children">
+                            <div class="file-item active">
+                                📄 App.jsx
+                            </div>
+                            <div class="file-item">
+                                📄 ChatRoom.jsx
+                            </div>
+                            <div class="file-item">
+                                📄 MessageList.jsx
+                            </div>
+                            <div class="file-item">
+                                📄 index.css
+                            </div>
+                        </div>
+                        <div class="file-item">
+                            📄 package.json
+                        </div>
+                    </div>
+                    <div class="folder-item">
+                        📁 server
+                    </div>
+                    <div class="folder-children">
+                        <div class="file-item">
+                            📄 index.js
+                        </div>
+                        <div class="file-item">
+                            📄 socketHandler.js
+                        </div>
+                        <div class="file-item">
+                            📄 package.json
+                        </div>
+                    </div>
+                    <div class="file-item">
+                        📄 README.md
+                    </div>
+                    <div class="file-item">
+                        📄 .gitignore
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center - Editor Area -->
+        <div class="editor-area">
+            <div class="tabs-bar">
+                <div class="editor-tab active">
+                    <span class="file-icon">📄</span>
+                    <span>App.jsx</span>
+                    <span class="tab-close">×</span>
+                </div>
+                <div class="editor-tab">
+                    <span class="file-icon">📄</span>
+                    <span>socketHandler.js</span>
+                    <span class="tab-close">×</span>
+                </div>
+                <div class="editor-tab">
+                    <span class="file-icon">📄</span>
+                    <span>ChatRoom.jsx</span>
+                    <span class="tab-close">×</span>
+                </div>
+            </div>
+            <div class="editor-container">
+                <div class="line-numbers">
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+                </div>
+                <textarea class="code-editor" style="padding-left: 80px;">import { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import ChatRoom from './components/ChatRoom';
+import './App.css';
+
+function App() {
+  const [socket, setSocket] = useState(null);
+  const [connected, setConnected] = useState(false);
+
+  useEffect(() => {
+    const newSocket = io('http://localhost:3001');
+    
+    newSocket.on('connect', () => {
+      console.log('Connected to server');
+      setConnected(true);
+    });
+
+    setSocket(newSocket);
+  }, []);
+                </textarea>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Instructions & Terminal -->
+        <aside class="right-sidebar">
+            <div class="instruction-panel">
+                <div class="instruction-header">
+                    <h3 class="instruction-title">학습 가이드</h3>
+                    <span class="progress-badge">3/7 완료</span>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number completed">1</div>
+                        <div class="step-title">프로젝트 초기 설정</div>
+                    </div>
+                    <div class="step-content">
+                        React 앱과 Express 서버를 초기화하고 필요한 패키지를 설치했습니다.
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number completed">2</div>
+                        <div class="step-title">Socket.io 설치</div>
+                    </div>
+                    <div class="step-content">
+                        클라이언트와 서버에 Socket.io를 설치하고 기본 설정을 완료했습니다.
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">3</div>
+                        <div class="step-title">WebSocket 연결 구현</div>
+                    </div>
+                    <div class="step-content">
+                        <p>클라이언트에서 서버로 WebSocket 연결을 수립합니다.</p>
+                        <p style="margin-top: 8px;">
+                            <code>App.jsx</code> 파일에서 <code>socket.io-client</code>를 
+                            사용하여 서버에 연결하세요.
+                        </p>
+                        <div class="hint-box">
+                            💡 힌트: useEffect 훅을 사용하여 컴포넌트 마운트 시 연결을 생성하세요.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">4</div>
+                        <div class="step-title">메시지 전송 기능</div>
+                    </div>
+                    <div class="step-content">
+                        사용자가 입력한 메시지를 서버로 전송하는 기능을 구현합니다.
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-header">
+                        <div class="step-number">5</div>
+                        <div class="step-title">메시지 수신 기능</div>
+                    </div>
+                    <div class="step-content">
+                        서버로부터 메시지를 받아 화면에 표시하는 기능을 구현합니다.
+                    </div>
+                </div>
+            </div>
+
+            <div class="terminal-panel">
+                <div class="terminal-header">
+                    <span class="terminal-title">터미널</span>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="btn-icon" style="width: 24px; height: 24px; font-size: 14px;">🗑️</button>
+                        <button class="btn-icon" style="width: 24px; height: 24px; font-size: 14px;">⟲</button>
+                    </div>
+                </div>
+                <div class="terminal-content">
+                    <div class="terminal-line">
+                        <span class="terminal-prompt">$ </span>npm install socket.io-client
+                    </div>
+                    <div class="terminal-line success">✓ socket.io-client@4.5.4 installed</div>
+                    <div class="terminal-line" style="margin-top: 12px;">
+                        <span class="terminal-prompt">$ </span>npm start
+                    </div>
+                    <div class="terminal-line">Compiled successfully!</div>
+                    <div class="terminal-line success">
+                        ✓ Local: http://localhost:3000
+                    </div>
+                    <div class="terminal-line success">
+                        ✓ Server: http://localhost:3001
+                    </div>
+                    <div class="terminal-line" style="margin-top: 12px; color: var(--text-primary);">
+                        Waiting for file changes...
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Bottom Status Bar -->
+    <div class="bottom-bar">
+        <div class="status-items">
+            <div class="status-item">
+                <div class="status-dot"></div>
+                <span>서버 실행 중</span>
+            </div>
+            <div class="status-item">
+                <span>UTF-8</span>
+            </div>
+            <div class="status-item">
+                <span>JavaScript JSX</span>
+            </div>
+        </div>
+        <div class="status-items">
+            <div class="status-item">
+                <span>Ln 11, Col 22</span>
+            </div>
+            <div class="status-item">
+                <span>Spaces: 2</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple syntax highlighting simulation
+        const editor = document.querySelector('.code-editor');
+        
+        editor.addEventListener('input', function() {
+            // In real implementation, use a library like CodeMirror or Monaco Editor
+            console.log('Code changed');
+        });
+
+        // File tree interaction
+        document.querySelectorAll('.file-item, .folder-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (this.classList.contains('file-item')) {
+                    document.querySelectorAll('.file-item').forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
