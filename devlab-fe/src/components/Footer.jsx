@@ -1,36 +1,36 @@
-import "./Footer.css";
+import styles from "./Footer.module.css";
 
 export default function Footer() {
   return (
     <>
-      <footer>
-        <div className="footer-container">
-          <div className="footer-top">
+      <footer className={styles["footer"]}>
+        <div className={styles["footer-container"]}>
+          <div className={styles["footer-top"]}>
             <div>
-              <div className="footer-brand">DevLab</div>
-              <p className="footer-description">
+              <div className={styles["footer-brand"]}>DevLab</div>
+              <p className={styles["footer-description"]}>
                 프로젝트 기반 코딩 교육의 선두주자
                 <br />
                 실전으로 배우고, 경험으로 성장하세요
               </p>
-              <div className="footer-social">
-                <a href="#" className="social-link">
+              <div className={styles["footer-social"]}>
+                <a href="#" className={styles["social-link"]}>
                   f
                 </a>
-                <a href="#" className="social-link">
+                <a href="#" className={styles["social-link"]}>
                   T
                 </a>
-                <a href="#" className="social-link">
+                <a href="#" className={styles["social-link"]}>
                   in
                 </a>
-                <a href="#" className="social-link">
+                <a href="#" className={styles["social-link"]}>
                   Y
                 </a>
               </div>
             </div>
-            <div className="footer-section">
+            <div className={styles["footer-section"]}>
               <h4>플랫폼</h4>
-              <ul className="footer-links">
+              <ul className={styles["footer-links"]}>
                 <li>
                   <a href="#">킷 둘러보기</a>
                 </li>
@@ -45,9 +45,9 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-            <div className="footer-section">
+            <div className={styles["footer-section"]}>
               <h4>지원</h4>
-              <ul className="footer-links">
+              <ul className={styles["footer-links"]}>
                 <li>
                   <a href="#">도움말 센터</a>
                 </li>
@@ -62,9 +62,9 @@ export default function Footer() {
                 </li>
               </ul>
             </div>
-            <div className="footer-section">
+            <div className={styles["footer-section"]}>
               <h4>회사</h4>
-              <ul className="footer-links">
+              <ul className={styles["footer-links"]}>
                 <li>
                   <a href="#">회사 소개</a>
                 </li>
@@ -80,8 +80,8 @@ export default function Footer() {
               </ul>
             </div>
           </div>
-          <div className="footer-bottom">
-            <div className="footer-copyright">
+          <div className={styles["footer-bottom"]}>
+            <div className={styles["footer-copyright"]}>
               <span>© 2026 DevLab. All rights reserved.</span>
               <a href="#" style={{ color: "#6b7280", textDecoration: "none" }}>
                 이용약관

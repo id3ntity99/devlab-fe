@@ -7,16 +7,15 @@ import Login from "./pages/Login.jsx";
 import KitList from "./pages/KitList.jsx";
 import KitDetail from "./pages/KitDetail.jsx";
 import Ide from "./pages/Ide.jsx";
-import KoreanStyle from "./pages/KoreanStyle.jsx";
+import SignUp from "./pages/SignUp.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import { AuthProvider } from "./context/AuthProvider.jsx";
+import { ProtectedRoute, PublicRoute } from "./components/auth/RouteGuard.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-  },
-  {
-    path: "/login",
-    element: <Login />,
   },
   {
     path: "/explore",
@@ -25,19 +24,27 @@ const router = createBrowserRouter([
   {
     path: "/kit/:id",
     element: <KitDetail />,
+  }, // Accessible to everyone regardless of authentication status
+  {
+    element: <PublicRoute />,
+    children: [
+      { path: "/login", element: <Login /> },
+      { path: "/signup", element: <SignUp /> },
+    ],
   },
   {
-    path: "/ide",
-    element: <Ide />,
-  },
-  {
-    path: "/korean",
-    element: <KoreanStyle />,
+    element: <ProtectedRoute />,
+    children: [
+      { path: "/dashboard", element: <Dashboard /> },
+      { path: "/ide", element: <Ide /> },
+    ],
   },
 ]);
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 );

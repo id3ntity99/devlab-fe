@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import NavigationBar from "../components/Navigation";
-import "./KitDetail.css";
+import styles from "./KitDetail.module.css";
 
 const kitData = {
   "chat-app": {
@@ -29,30 +29,33 @@ export default function KitDetail() {
     <div className="kit-detail-page">
       <NavigationBar />
 
-      <main className="detail-container">
-        <div className="content-grid">
-          <section className="main-content">
-            <div className="kit-hero">📦</div>
-            <div className="kit-header">
-              <h1 className="kit-title">{kit.title}</h1>
-              <div className="kit-meta">
+      <main className={styles["detail-container"]}>
+        <div className={styles["content-grid"]}>
+          <section className={styles["main-content"]}>
+            <div className={styles["kit-hero"]}>📦</div>
+            <div className={styles["kit-header"]}>
+              <h1 className={styles["kit-title"]}>{kit.title}</h1>
+              <div className={styles["kit-meta"]}>
                 {kit.category} · {kit.meta}
               </div>
             </div>
 
-            <div className="tabs">
-              <a className="tab active" href="#overview">
+            <div className={styles["tabs"]}>
+              <a
+                className={styles["tab"] + " " + styles["active"]}
+                href="#overview"
+              >
                 개요
               </a>
-              <a className="tab" href="#curriculum">
+              <a className={styles["tab"]} href="#curriculum">
                 커리큘럼
               </a>
-              <a className="tab" href="#reviews">
+              <a className={styles["tab"]} href="#reviews">
                 리뷰
               </a>
             </div>
 
-            <section id="overview" className="section">
+            <section id="overview" className={styles["section"]}>
               <h2>프로젝트 내용</h2>
               <p>
                 실시간 채팅 앱을 만들며 백엔드 소켓, 프론트 상태관리, 디자인
@@ -60,7 +63,7 @@ export default function KitDetail() {
               </p>
             </section>
 
-            <section className="section">
+            <section className={styles["section"]} id={styles["curriculum"]}>
               <h3>학습 목표</h3>
               <ul>
                 {kit.features.map((item) => (
@@ -69,53 +72,59 @@ export default function KitDetail() {
               </ul>
             </section>
 
-            <section className="section" id="reviews">
+            <section className={styles["section"]} id={styles["reviews"]}>
               <h3>리뷰</h3>
-              <article className="review-card">
-                <p className="reviewer-name">홍길동</p>
-                <p>실무에서 바로 쓸 수 있는 구조를 배워서 너무 좋았어요.</p>
+              <article className={styles["review-card"]}>
+                <p className={styles["reviewer-name"]}>홍길동</p>
+                <p>{kit.reviews}개의 리뷰</p>
               </article>
             </section>
           </section>
 
-          <aside className="sidebar">
-            <div className="purchase-card">
-              <div className="price-section">
-                <div className="current-price">{kit.price}</div>
-                <div className="original-price">{kit.originalPrice}</div>
-                <div className="discount-badge">40% OFF</div>
+          <aside className={styles["sidebar"]}>
+            <div className={styles["purchase-card"]}>
+              <div className={styles["price-section"]}>
+                <div className={styles["current-price"]}>{kit.price}</div>
+                <div className={styles["original-price"]}>
+                  {kit.originalPrice}
+                </div>
+                <div className={styles["discount-badge"]}>40% OFF</div>
               </div>
-              <button className="btn btn-primary">지금 등록하기</button>
-              <button className="btn btn-outline">찜하기</button>
-              <ul className="includes-list">
+              <button className={styles["btn"] + " " + styles["btn-primary"]}>
+                지금 등록하기
+              </button>
+              <button className={styles["btn"] + " " + styles["btn-outline"]}>
+                찜하기
+              </button>
+              <ul className={styles["includes-list"]}>
                 {kit.includes.map((item) => (
-                  <li key={item} className="includes-item">
+                  <li key={item} className={styles["includes-item"]}>
                     ✓ {item}
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="info-card">
-              <div className="info-item">
-                <span className="info-label">수준</span>
-                <span className="info-value">중급</span>
+            <div className={styles["info-card"]}>
+              <div className={styles["info-item"]}>
+                <span className={styles["info-label"]}>수준</span>
+                <span className={styles["info-value"]}>중급</span>
               </div>
-              <div className="info-item">
-                <span className="info-label">평점</span>
-                <span className="info-value">
+              <div className={styles["info-item"]}>
+                <span className={styles["info-label"]}>평점</span>
+                <span className={styles["info-value"]}>
                   {kit.rating} ({kit.reviews}개)
                 </span>
               </div>
-              <div className="info-item">
-                <span className="info-label">카테고리</span>
-                <span className="info-value">{kit.category}</span>
+              <div className={styles["info-item"]}>
+                <span className={styles["info-label"]}>카테고리</span>
+                <span className={styles["info-value"]}>{kit.category}</span>
               </div>
             </div>
 
             <Link
               to="/explore"
-              className="btn btn-white"
+              className={styles["btn"] + " " + styles["btn-white"]}
               style={{ display: "block", marginTop: "14px" }}
             >
               킷 목록으로 돌아가기

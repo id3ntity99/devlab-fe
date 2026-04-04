@@ -1,52 +1,71 @@
-import "./Hero.css";
+import styles from "./Hero.module.css";
+
 export default function Hero() {
   return (
     <>
-      <section className="hero">
-        <div className="hero-container">
-          <div className="hero-content">
-            <div className="hero-badge">🚀 새로운 학습 경험</div>
-            <h1 className="hero-title">
+      <section className={styles["hero"]}>
+        <div className={styles["hero-container"]}>
+          <div className={styles["hero-content"]}>
+            <div className={styles["hero-badge"]}>🚀 새로운 학습 경험</div>
+            <h1 className={styles["hero-title"]}>
               실전 프로젝트로
               <br />
-              <span className="gradient-text">코딩 마스터하기</span>
+              <span className={styles["gradient-text"]}>코딩 마스터하기</span>
             </h1>
-            <p className="hero-description">
+            <p className={styles["hero-description"]}>
               전문 개발자들이 만든 프로젝트 기반 학습 킷을 구매하고 판매하세요.
               영상 강의가 아닌, 직접 만들며 배우는 진짜 학습을 경험하세요.
             </p>
-            <div className="hero-actions">
-              <a href="#explore" className="btn btn-primary btn-large">
+            <div className={styles["hero-actions"]}>
+              <a
+                href="#explore"
+                className={
+                  styles["btn"] +
+                  " " +
+                  styles["btn-primary"] +
+                  " " +
+                  styles["btn-large"]
+                }
+              >
                 킷 둘러보기
               </a>
-              <a href="#create" className="btn btn-outline btn-large">
+              <a
+                href="#create"
+                className={
+                  styles["btn"] +
+                  " " +
+                  styles["btn-outline"] +
+                  " " +
+                  styles["btn-large"]
+                }
+              >
                 킷 판매하기
               </a>
             </div>
-            <div className="hero-stats">
-              <div className="stat-item">
-                <div className="stat-number">2,500+</div>
-                <div className="stat-label">프로젝트 킷</div>
+            <div className={styles["hero-stats"]}>
+              <div className={styles["stat-item"]}>
+                <div className={styles["stat-number"]}>2,500+</div>
+                <div className={styles["stat-label"]}>프로젝트 킷</div>
               </div>
-              <div className="stat-item">
-                <div className="stat-number">50,000+</div>
-                <div className="stat-label">수강생</div>
+              <div className={styles["stat-item"]}>
+                <div className={styles["stat-number"]}>50,000+</div>
+                <div className={styles["stat-label"]}>수강생</div>
               </div>
-              <div className="stat-item">
-                <div className="stat-number">95%</div>
-                <div className="stat-label">만족도</div>
+              <div className={styles["stat-item"]}>
+                <div className={styles["stat-number"]}>95%</div>
+                <div className={styles["stat-label"]}>만족도</div>
               </div>
             </div>
           </div>
-          <div className="hero-visual">
-            <div className="mockup-browser">
-              <div className="browser-header">
-                <div className="browser-dot"></div>
-                <div className="browser-dot"></div>
-                <div className="browser-dot"></div>
+          <div className={styles["hero-visual"]}>
+            <div className={styles["mockup-browser"]}>
+              <div className={styles["browser-header"]}>
+                <div className={styles["browser-dot"]}></div>
+                <div className={styles["browser-dot"]}></div>
+                <div className={styles["browser-dot"]}></div>
               </div>
-              <div className="browser-content">
-                <div className="code-snippet">
+              <div className={styles["browser-content"]}>
+                <div className={styles["code-snippet"]}>
                   const learningPath = {"{"}
                   <br />
                   &nbsp;&nbsp;step1: "프로젝트 선택",

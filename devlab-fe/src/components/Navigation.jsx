@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-import "./Navigation.css";
+import styles from "./Navigation.module.css";
 
 export default function NavigationBar() {
   const currentPath = useLocation().pathname;
@@ -13,44 +13,50 @@ export default function NavigationBar() {
 
   return (
     <>
-      <nav>
-        <div className="nav-container">
-          <div className="logo">DevLab</div>
-          <div className="nav-center">
+      <nav className={styles["nav"]}>
+        <div className={styles["nav-container"]}>
+          <div className={styles["logo"]}>DevLab</div>
+          <div className={styles["nav-center"]}>
             <a
               href="/explore"
-              className={activeLink === "/explore" ? "active" : ""}
+              className={activeLink === "/explore" ? styles["active"] : ""}
               onClick={() => handleLinkClick("/explore")}
             >
               킷 둘러보기
             </a>
             <a
               href="/create"
-              className={activeLink === "/create" ? "active" : ""}
+              className={activeLink === "/create" ? styles["active"] : ""}
               onClick={() => handleLinkClick("/create")}
             >
               킷 만들기
             </a>
             <a
               href="/community"
-              className={activeLink === "/community" ? "active" : ""}
+              className={activeLink === "/community" ? styles["active"] : ""}
               onClick={() => handleLinkClick("/community")}
             >
               커뮤니티
             </a>
             <a
               href="/pricing"
-              className={activeLink === "/pricing" ? "active" : ""}
+              className={activeLink === "/pricing" ? styles["active"] : ""}
               onClick={() => handleLinkClick("/pricing")}
             >
               요금제
             </a>
           </div>
-          <div className="nav-right">
-            <a href="/login" className="btn btn-text">
+          <div className={styles["nav-right"]}>
+            <a
+              href="/login"
+              className={styles["btn"] + " " + styles["btn-text"]}
+            >
               로그인
             </a>
-            <a href="/signup" className="btn btn-primary">
+            <a
+              href="/signup"
+              className={styles["btn"] + " " + styles["btn-primary"]}
+            >
               시작하기
             </a>
           </div>

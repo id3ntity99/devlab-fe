@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import NavigationBar from "../components/Navigation";
-import "./KitList.css";
+import styles from "./KitList.module.css";
 
 const kits = [
   {
@@ -37,35 +37,42 @@ const kits = [
 
 export default function KitList() {
   return (
-    <div className="kit-list-page">
+    <div className={styles["kit-list-page"]}>
       <NavigationBar />
 
-      <main className="main-container">
-        <div className="breadcrumb">
-          <Link to="/">홈</Link>
+      <main className={styles["main-container"]}>
+        <div className={styles["breadcrumb"]}>
+          <Link to="/" className={styles["breadcrumb-link"]}>
+            홈
+          </Link>
           <span>/</span>
           <span>프로젝트 킷</span>
         </div>
 
-        <section className="kit-list-header">
+        <section className={styles["kit-list-header"]}>
           <h1>프로젝트 킷 탐색</h1>
           <p>검증된 전문가들이 만든 실전 프로젝트로 실력을 키우세요</p>
         </section>
 
-        <div className="kits-grid">
+        <div className={styles["kits-grid"]}>
           {kits.map((kit) => (
-            <article key={kit.id} className="kit-card">
-              <div className="kit-thumbnail">📦</div>
-              <div className="kit-body">
-                <h2 className="kit-title">{kit.title}</h2>
-                <p className="kit-description">{kit.desc}</p>
-                <div className="kit-meta">
-                  <span className="author-name">{kit.author}</span>
-                  <span className="difficulty-badge">{kit.level}</span>
+            <article key={kit.id} className={styles["kit-card"]}>
+              <div className={styles["kit-thumbnail"]}>📦</div>
+              <div className={styles["kit-body"]}>
+                <h2 className={styles["kit-title"]}>{kit.title}</h2>
+                <p className={styles["kit-description"]}>{kit.desc}</p>
+                <div className={styles["kit-meta"]}>
+                  <span className={styles["author-name"]}>{kit.author}</span>
+                  <span className={styles["difficulty-badge"]}>
+                    {kit.level}
+                  </span>
                 </div>
-                <div className="kit-footer">
-                  <span className="kit-price">{kit.price}</span>
-                  <Link to={`/kit/${kit.id}`} className="btn btn-primary">
+                <div className={styles["kit-footer"]}>
+                  <span className={styles["kit-price"]}>{kit.price}</span>
+                  <Link
+                    to={`/kit/${kit.id}`}
+                    className={styles["btn"] + " " + styles["btn-primary"]}
+                  >
                     자세히 보기
                   </Link>
                 </div>
