@@ -24,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/kit/:id",
     element: <KitDetail />,
+  },
+  {
+    path: "/kits",
+    element: <KitList />,
   }, // Accessible to everyone regardless of authentication status
   {
     element: <PublicRoute />,
