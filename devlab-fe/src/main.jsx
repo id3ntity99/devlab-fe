@@ -18,11 +18,7 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/explore",
-    element: <KitList />,
-  },
-  {
-    path: "/kit/:id",
+    path: "/kits/:kitId",
     element: <KitDetail />,
   },
   {

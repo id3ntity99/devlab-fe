@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import KitNav from "../components/kit/KitNav";
 import KitGrid from "../components/kit/KitGrid";
 import Pagination from "../components/kit/Pagination";
+import { useNavigate } from "react-router-dom";
+import KitFilter from "../components/kit/KitFilter";
 
 export default function KitList() {
   const [kits, setKits] = useState([]);
@@ -14,13 +16,25 @@ export default function KitList() {
   const [hasNext, setHasNext] = useState(false);
   const [searchParams] = useSearchParams();
 
-  const page = searchParams.get("page") || 1;
+  const navigate = useNavigate();
 
+  // Validate URL parameters on component mount
   useEffect(() => {
+    const page = searchParams.get("page");
+    const size = searchParams.get("size");
+    if (!page || !size) {
+      navigate("/kits?page=1&size=9", { replace: true });
+    }
+  }, [searchParams, navigate]);
+
+  // Fetch kits whenever search parameters change
+  useEffect(() => {
+    const page = searchParams.get("page");
+    const size = searchParams.get("size");
     const fetchKits = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/v1/kits?pageNum=${page}`,
+          `http://localhost:8080/api/v1/kits?page=${page}&size=${size}`,
           {
             withCredentials: true,
           },
@@ -34,12 +48,11 @@ export default function KitList() {
       }
     };
     fetchKits();
-  }, [page]);
+  }, [searchParams]);
 
   return (
     <>
       <KitNav />
-
       <div className={styles["main-container"]}>
         <div className={styles["breadcrumb"]}>
           <a href="#" className={styles["breadcrumb-link"]}>
@@ -49,6 +62,7 @@ export default function KitList() {
           <span>프로젝트 킷</span>
         </div>
 
+        {/* FIXME - Uncomment when search functionality is implemented 
         <div className={styles["search-section"]}>
           <div className={styles["search-bar"]}>
             <input
@@ -59,7 +73,7 @@ export default function KitList() {
             <span className={styles["search-icon"]}>🔍</span>
           </div>
         </div>
-
+        */}
         <div className={styles["page-header"]}>
           <h1 className={styles["page-title"]}>프로젝트 킷 탐색</h1>
           <p className={styles["page-subtitle"]}>
@@ -67,103 +81,14 @@ export default function KitList() {
           </p>
         </div>
 
-        <div className={styles["filters-section"]}>
-          <aside className={styles["sidebar"]}>
-            <div className={styles["filter-group"]}>
-              <h3 className={styles["filter-title"]}>카테고리</h3>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" defaultChecked />
-                <span>전체</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>웹 개발 (324)</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>모바일 앱 (156)</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>데이터 사이언스 (89)</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>머신러닝 (123)</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>게임 개발 (67)</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>백엔드 (198)</span>
-              </label>
+        {/*<div className={styles["filters-section"]}>*/}
+        {/*<KitFilter />*/}
+        <div className={styles["content-area"]}>
+          <div className={styles["content-header"]}>
+            <div className={styles["results-count"]}>
+              총 {totalElement}개의 프로젝트 킷
             </div>
-
-            <div className={styles["filter-group"]}>
-              <h3 className={styles["filter-title"]}>난이도</h3>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>입문</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>중급</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>고급</span>
-              </label>
-            </div>
-
-            <div className={styles["filter-group"]}>
-              <h3 className={styles["filter-title"]}>가격</h3>
-              <div className={styles["price-inputs"]}>
-                <input
-                  type="number"
-                  className={styles["price-input"]}
-                  placeholder="최소"
-                />
-                <span style={{ color: "var(--text-muted)" }}>~</span>
-                <input
-                  type="number"
-                  className={styles["price-input"]}
-                  placeholder="최대"
-                />
-              </div>
-            </div>
-
-            <div className={styles["filter-group"]}>
-              <h3 className={styles["filter-title"]}>기술 스택</h3>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>React</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>Vue.js</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>Python</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>Node.js</span>
-              </label>
-              <label className={styles["filter-option"]}>
-                <input type="checkbox" />
-                <span>TensorFlow</span>
-              </label>
-            </div>
-          </aside>
-
-          <div className={styles["content-area"]}>
-            <div className={styles["content-header"]}>
-              <div className={styles["results-count"]}>
-                총 {totalElement}개의 프로젝트 킷
-              </div>
+            {/* 
               <select className={styles["sort-dropdown"]}>
                 <option>인기순</option>
                 <option>최신순</option>
@@ -171,12 +96,13 @@ export default function KitList() {
                 <option>가격 낮은순</option>
                 <option>가격 높은순</option>
               </select>
-            </div>
-            <KitGrid kits={kits} />
-            <Pagination totalPages={totalPage} hasNext={hasNext} />
+              */}
           </div>
+          <KitGrid kits={kits} />
+          <Pagination totalPages={totalPage} hasNext={hasNext} />
         </div>
       </div>
+      {/*</div>*/}
     </>
   );
 }

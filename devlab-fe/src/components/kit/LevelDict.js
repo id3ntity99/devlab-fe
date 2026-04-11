@@ -8,3 +8,12 @@ export function translate(level) {
       return "고급";
   }
 }
+
+export function translateLanguage(lang) {
+  switch (lang) {
+    case "KOR":
+      return "한국어";
+    case "ENG":
+      return "영어";
+  }
+}

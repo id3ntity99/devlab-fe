@@ -1,20 +1,35 @@
-:root {
-  --border: #e5e7eb;
-  --bg-primary: #ffffff;
-  --bg-secondary: #f9fafb;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --primary: #6366f1;
-  --primary-dark: #4f46e5;
+/* Navigation */
+nav {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-.kit-detail-page {
-  min-height: 100vh;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
+.nav-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
 }
 
-.detail-container {
+.logo {
+  font-family: "Montserrat", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Main Container */
+.main-container {
   max-width: 1400px;
   margin: 0 auto;
   padding: 32px 24px;
@@ -22,179 +37,11 @@
 
 .content-grid {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 400px;
   gap: 32px;
 }
 
-.kit-hero {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-  height: 320px;
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 96px;
-  margin-bottom: 24px;
-}
-
-.kit-header {
-  margin-bottom: 22px;
-}
-
-.kit-title {
-  font-size: 36px;
-  font-weight: 900;
-  margin-bottom: 16px;
-}
-
-.kit-meta {
-  color: var(--text-secondary);
-  font-size: 14px;
-}
-
-.tabs {
-  display: flex;
-  gap: 24px;
-  border-bottom: 2px solid var(--border);
-  margin-bottom: 24px;
-}
-
-.tab {
-  color: var(--text-secondary);
-  text-decoration: none;
-  padding-bottom: 12px;
-  border-bottom: 2px solid transparent;
-  font-weight: 700;
-}
-
-.tab.active {
-  color: var(--primary);
-  border-bottom-color: var(--primary);
-}
-
-.section {
-  margin-bottom: 32px;
-}
-
-.section h2,
-.section h3 {
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
-
-.section p,
-.section ul,
-.section li {
-  color: var(--text-secondary);
-}
-
-.section ul {
-  margin-top: 12px;
-  list-style: disc;
-  margin-left: 18px;
-}
-
-.review-card {
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-}
-
-.review-card .reviewer-name {
-  font-weight: 700;
-  margin-bottom: 8px;
-}
-
-.sidebar {
-  position: sticky;
-  top: 96px;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.purchase-card,
-.info-card {
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 20px;
-}
-
-.current-price {
-  font-size: 40px;
-  font-weight: 900;
-  color: var(--text-primary);
-}
-
-.original-price {
-  font-size: 18px;
-  color: var(--text-secondary);
-  text-decoration: line-through;
-  margin-left: 10px;
-}
-
-.discount-badge {
-  display: inline-block;
-  background: #ef4444;
-  color: white;
-  padding: 4px 12px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 700;
-  margin-top: 8px;
-}
-
-.btn-outline {
-  width: 100%;
-  padding: 12px;
-  border: 2px solid var(--primary);
-  background: transparent;
-  color: var(--primary);
-  border-radius: 8px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 10px;
-}
-
-.btn-outline:hover {
-  background: var(--primary);
-  color: white;
-}
-
-.info-item {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-  font-size: 14px;
-}
-
-.info-label {
-  color: var(--text-secondary);
-}
-
-.info-value {
-  font-weight: 700;
-}
-
-.includes-list {
-  margin-top: 14px;
-  list-style: none;
-  padding: 0;
-}
-
-.includes-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  color: var(--text-secondary);
-}
-
+/* Responsive */
 @media (max-width: 1024px) {
   .content-grid {
     grid-template-columns: 1fr;

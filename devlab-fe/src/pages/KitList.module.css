@@ -1,6 +1,7 @@
 /* Main Container */
 .main-container {
   max-width: 1400px;
+  width: 960px; /*FIXME Delete this whenever the KitFilter is added to the layout*/
   margin: 0 auto;
   padding: 32px 24px;
 }
@@ -89,69 +90,6 @@
   display: grid;
   grid-template-columns: 250px 1fr;
   gap: 32px;
-}
-
-/* Sidebar Filters */
-.sidebar {
-  background: var(--bg-primary);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 24px;
-  height: fit-content;
-  position: sticky;
-  top: 96px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-.filter-group {
-  margin-bottom: 28px;
-}
-
-.filter-group:last-child {
-  margin-bottom: 0;
-}
-
-.filter-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 16px;
-  color: var(--text-primary);
-}
-
-.filter-option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-  font-size: 14px;
-  color: var(--text-secondary);
-  cursor: pointer;
-}
-
-.filter-option input {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
-
-.filter-option:hover {
-  color: var(--text-primary);
-}
-
-.price-inputs {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.price-input {
-  flex: 1;
-  padding: 8px 12px;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text-primary);
-  font-size: 13px;
 }
 
 /* Main Content */

@@ -1,7 +1,10 @@
 import { useMemo } from "react";
 import styles from "./Pagination.module.css";
+import { useSearchParams } from "react-router-dom";
 
-export default function Pagination({ totalPages = 1, hasNext }) {
+export default function Pagination({ totalPages, hasNext }) {
+  const [searchParams] = useSearchParams();
+  const currentPage = parseInt(searchParams.get("page")) || "1"; // Default to page 1 if not present
   const pageNumbers = useMemo(
     () =>
       Array.from({ length: Math.max(1, totalPages) }, (_, index) => index + 1),
@@ -10,9 +13,9 @@ export default function Pagination({ totalPages = 1, hasNext }) {
 
   return (
     <div className={styles["pagination"]}>
-      <button className={styles["page-btn"]} disabled>
-        이전
-      </button>
+      {currentPage === 1 ? null : (
+        <button className={styles["page-btn"]}>이전</button>
+      )}
       {pageNumbers.map((page) => (
         <button
           key={page}
