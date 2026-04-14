@@ -18,12 +18,12 @@ const router = createBrowserRouter([
     element: <App />,
   },
   {
-    path: "/explore",
-    element: <KitList />,
+    path: "/kits/:kitId",
+    element: <KitDetail />,
   },
   {
-    path: "/kit/:id",
-    element: <KitDetail />,
+    path: "/kits",
+    element: <KitList />,
   }, // Accessible to everyone regardless of authentication status
   {
     element: <PublicRoute />,

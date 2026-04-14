@@ -3,6 +3,7 @@ nav {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
+  padding: 0;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -23,31 +24,39 @@ nav {
   font-family: "Montserrat", sans-serif;
   font-size: 24px;
   font-weight: 800;
-  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  background: linear-gradient(135deg, var(--primary), #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Main Container */
-.main-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 32px 24px;
+.logo a {
+  text-decoration: none;
 }
 
-.content-grid {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 32px;
+.nav-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  .content-grid {
-    grid-template-columns: 1fr;
-  }
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
 
-  .sidebar {
-    position: static;
-  }
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
 }

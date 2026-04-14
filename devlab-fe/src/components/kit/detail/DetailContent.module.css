@@ -1,0 +1,112 @@
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 32px;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 32px;
+}
+
+.tab {
+  padding: 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
+}
+
+.tab:hover {
+  color: var(--text-primary);
+}
+
+.tab.active {
+  color: var(--primary);
+  border-bottom-color: var(--primary);
+}
+
+/* Content Sections */
+.section {
+  margin-bottom: 48px;
+}
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.section-content {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.section-content p {
+  margin-bottom: 16px;
+}
+
+.section-content ul {
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+
+.section-content li {
+  margin-bottom: 8px;
+}
+
+/* Tech Stack */
+.tech-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tech-tag {
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Curriculum */
+.curriculum-list {
+  list-style: none;
+}
+
+.curriculum-item {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.curriculum-item:hover {
+  border-color: var(--primary);
+}
+
+.curriculum-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.curriculum-title {
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lesson-count {
+  font-size: 13px;
+  color: var(--text-muted);
+}

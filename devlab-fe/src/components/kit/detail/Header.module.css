@@ -1,0 +1,74 @@
+/* Kit Header */
+.kit-header {
+  margin-bottom: 32px;
+}
+
+.kit-title {
+  font-size: 36px;
+  font-weight: 900;
+  margin-bottom: 16px;
+}
+
+.kit-meta {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.author-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), #a78bfa);
+}
+
+.author-details h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.author-details p {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.rating-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.stars {
+  color: #fbbf24;
+  font-size: 16px;
+}
+
+.rating-text {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.rating-count {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.stat-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--text-secondary);
+}

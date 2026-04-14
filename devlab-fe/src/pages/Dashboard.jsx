@@ -18,7 +18,9 @@ export default function Dashboard() {
     <>
       <nav>
         <div className={styles["nav-container"]}>
-          <div className={styles["logo"]}>DevLab</div>
+          <div className={styles["logo"]}>
+            <a href="/dashboard">DevLab</a>
+          </div>
           <div className={styles["nav-center"]}>
             <a
               href="#dashboard"
@@ -29,7 +31,7 @@ export default function Dashboard() {
             <a href="#my-kits" className={styles["nav-link"]}>
               내 학습
             </a>
-            <a href="#explore" className={styles["nav-link"]}>
+            <a href="/kits" className={styles["nav-link"]}>
               킷 둘러보기
             </a>
             <a href="#community" className={styles["nav-link"]}>
