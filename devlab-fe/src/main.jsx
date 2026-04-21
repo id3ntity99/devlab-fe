@@ -30,6 +30,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/login", element: <Login /> },
       { path: "/signup", element: <SignUp /> },
+      { path: "/kits", element: <KitList /> },
     ],
   },
   {
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/ide", element: <Ide /> },
+      { path: "/kits/:kitId", element: <KitDetail /> },
     ],
   },
 ]);

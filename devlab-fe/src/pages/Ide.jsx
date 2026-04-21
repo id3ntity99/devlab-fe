@@ -1,4 +1,4 @@
-import NavigationBar from "../components/Navigation";
+import NavigationBar from "../components/landing/Navigation";
 import styles from "./Ide.module.css";
 
 export default function Ide() {
