@@ -1,5 +1,4 @@
-import { Link, useSearchParams } from "react-router-dom";
-import NavigationBar from "../components/Navigation";
+import { useSearchParams } from "react-router-dom";
 import styles from "./KitList.module.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -7,7 +6,6 @@ import KitNav from "../components/kit/KitNav";
 import KitGrid from "../components/kit/KitGrid";
 import Pagination from "../components/kit/Pagination";
 import { useNavigate } from "react-router-dom";
-import KitFilter from "../components/kit/KitFilter";
 
 export default function KitList() {
   const [kits, setKits] = useState([]);

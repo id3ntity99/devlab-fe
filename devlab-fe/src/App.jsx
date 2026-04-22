@@ -1,10 +1,10 @@
 import "./App.css";
-import NavigationBar from "./components/Navigation";
-import Hero from "./components/Hero";
-import Features from "./components/Features";
-import FeaturedKits from "./components/FeaturedKits";
-import Action from "./components/Action";
-import Footer from "./components/Footer";
+import NavigationBar from "./components/landing/Navigation";
+import Hero from "./components/landing/Hero";
+import Features from "./components/landing/Features";
+import FeaturedKits from "./components/landing/FeaturedKits";
+import Action from "./components/landing/Action";
+import Footer from "./components/landing/Footer";
 
 function App() {
   return (
