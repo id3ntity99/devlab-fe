@@ -22,6 +22,11 @@ export default function DetailContent({ kit }) {
       <div className={styles["section"]}>
         <h2 className={styles["section-title"]}>학습 내용</h2>
         <div className={styles["section-content"]}>
+          <ul>
+            {kit.learningContents.map((content, index) => (
+              <li key={index}>{content}</li>
+            ))}
+          </ul>
           {/* FIXME - Use list of learning contents when API provides it as an array
           <ul>
             <li>WebSocket과 Socket.io를 활용한 실시간 통신 구현</li>
@@ -34,9 +39,6 @@ export default function DetailContent({ kit }) {
             <li>Docker를 활용한 배포</li>
           </ul>
           */}
-          <ul>
-            <li>{kit.learningContent}</li>
-          </ul>
         </div>
       </div>
 
