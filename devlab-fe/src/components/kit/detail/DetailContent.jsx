@@ -1,7 +1,6 @@
 import styles from "./DetailContent.module.css";
 
 export default function DetailContent({ kit }) {
-  console.log(kit);
   return (
     <>
       <div className={styles["tabs"]}>
