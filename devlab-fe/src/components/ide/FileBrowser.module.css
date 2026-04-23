@@ -1,0 +1,56 @@
+/* Sidebar - File Explorer */
+.sidebar {
+  background: var(--bg-primary);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+}
+
+.sidebar-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: var(--bg-secondary);
+}
+
+.file-tree {
+  padding: 8px;
+}
+
+.file-item,
+.folder-item {
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  margin-bottom: 2px;
+  transition: all 0.2s;
+}
+
+.file-item:hover,
+.folder-item:hover {
+  background: var(--bg-tertiary);
+}
+
+.file-item.active {
+  background: var(--bg-tertiary);
+  color: var(--primary);
+}
+
+.folder-item {
+  font-weight: 600;
+}
+
+.file-icon {
+  font-size: 16px;
+}
+
+.folder-children {
+  margin-left: 20px;
+}

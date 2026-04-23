@@ -1,0 +1,48 @@
+/* Terminal */
+.terminal-panel {
+  height: 250px;
+  max-height: 60%;
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border);
+}
+
+.terminal-header {
+  background: var(--bg-secondary);
+  padding: 8px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.terminal-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.terminal-content {
+  height: calc(100% - 40px);
+  padding: 12px;
+  overflow-y: auto;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.terminal-line {
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.terminal-line.success {
+  color: var(--success);
+}
+
+.terminal-line.error {
+  color: var(--error);
+}
+
+.terminal-prompt {
+  color: var(--primary);
+}
