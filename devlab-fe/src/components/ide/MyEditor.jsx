@@ -5,11 +5,7 @@ export default function MyEditor() {
   return (
     <div className={styles["editor-area"]}>
       <div className={styles["editor-container"]}>
-        <Editor
-          className={styles["code-editor"]}
-          defaultLanguage="java"
-          defaultValue="public static void main(String[] args){\n}"
-        />
+        <Editor className={styles["code-editor"]} defaultLanguage="text" />
       </div>
     </div>
   );

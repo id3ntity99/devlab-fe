@@ -14,20 +14,6 @@
   --error: #ef4444;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Noto Sans KR", sans-serif;
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  overflow: hidden;
-  height: 100vh;
-}
-
 /* Main Layout */
 .main-layout {
   display: grid;

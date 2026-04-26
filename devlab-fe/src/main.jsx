@@ -25,7 +25,6 @@ const router = createBrowserRouter([
     path: "/kits",
     element: <KitList />,
   }, // Accessible to everyone regardless of authentication status
-  { path: "/ide", element: <Ide /> }, //FIXME Move this to ProtectedRoute
   {
     element: <PublicRoute />,
     children: [
@@ -39,6 +38,7 @@ const router = createBrowserRouter([
     children: [
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/kits/:kitId", element: <KitDetail /> },
+      { path: "/kits/:kitId/workspace", element: <Ide /> },
     ],
   },
 ]);

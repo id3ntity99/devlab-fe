@@ -13,6 +13,7 @@
   --text-muted: #9ca3af;
   --border: #e5e7eb;
 }
+
 /* Section Card */
 .section-card {
   background: var(--bg-primary);
