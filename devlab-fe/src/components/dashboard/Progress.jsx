@@ -7,7 +7,6 @@ function calcuateProgress(completedLessons, totalLessons) {
 }
 
 export default function Progress({ projects }) {
-  console.log(projects);
   return (
     <div className={styles["section-card"]} style={{ marginBottom: "24px" }}>
       <div className={styles["section-header"]}>
@@ -23,8 +22,8 @@ export default function Progress({ projects }) {
           진행 중인 프로젝트가 없습니다.
         </div>
       ) : (
-        projects.map((project) => (
-          <div className={styles["kit-item"]}>
+        projects.map((project, idx) => (
+          <div key={idx} className={styles["kit-item"]}>
             <div
               className={styles["kit-thumbnail"]}
               style={{
@@ -40,13 +39,17 @@ export default function Progress({ projects }) {
                 <div
                   className={styles["progress-fill"]}
                   style={{
-                    width: `${calcuateProgress(project.currentStep, project.totalSteps)}%`,
+                    width: `${calcuateProgress(project.solvedProblemsCount, project.totalProblemsCount)}%`,
                   }}
                 ></div>
               </div>
               <div className={styles["progress-text"]}>
-                {calcuateProgress(project.currentStep, project.totalSteps)}%
-                완료 ({project.currentStep}/{project.totalSteps} 단계)
+                {calcuateProgress(
+                  project.solvedProblemsCount,
+                  project.totalProblemsCount,
+                )}
+                % 완료 ({project.solvedProblemsCount}/
+                {project.totalProblemsCount} 단계)
               </div>
             </div>
           </div>
