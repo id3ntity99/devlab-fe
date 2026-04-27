@@ -22,8 +22,8 @@ export default function Progress({ projects }) {
         },
       );
 
-      // If the project user just clicked has already started or this is the first time
       if (response.status === 200) {
+        // This means that the user is trying to start project, or initialize the workspace for the first time
         navigate(`/kits/${kitId}/workspace`); //Navigate to the IDE page. Server will reject/start project initialization automatically
       }
     } catch (error) {
