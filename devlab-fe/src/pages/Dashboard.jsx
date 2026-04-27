@@ -30,10 +30,10 @@ export default function Dashboard() {
         <div className={styles["content-grid"]}>
           <div>
             <Progress projects={projects} />
-            {/* 
+          </div>
+          {/* 
             <LearningRecommendation />
             */}
-          </div>
 
           <div>
             {/*

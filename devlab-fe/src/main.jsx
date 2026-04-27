@@ -37,8 +37,8 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       { path: "/dashboard", element: <Dashboard /> },
-      { path: "/ide", element: <Ide /> },
       { path: "/kits/:kitId", element: <KitDetail /> },
+      { path: "/kits/:kitId/workspace", element: <Ide /> },
     ],
   },
 ]);
