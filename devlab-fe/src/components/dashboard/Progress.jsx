@@ -1,5 +1,7 @@
 import styles from "./Progress.module.css";
 import { generate } from "../kit/GradientColorGenerator.js";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function calcuateProgress(completedLessons, totalLessons) {
   if (totalLessons === 0) return 0;
@@ -7,6 +9,33 @@ function calcuateProgress(completedLessons, totalLessons) {
 }
 
 export default function Progress({ projects }) {
+  const navigate = useNavigate();
+
+  async function handleClickProject(event) {
+    const kitId = event.currentTarget.dataset.id;
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/v1/kits/${kitId}/workspace/init`,
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+
+      // If the project user just clicked has already started or this is the first time
+      if (response.status === 200) {
+        navigate(`/kits/${kitId}/workspace`); //Navigate to the IDE page. Server will reject/start project initialization automatically
+      }
+    } catch (error) {
+      if (error.response.status === 409) {
+        // This means the server found that the user has already started the proejct.
+        // Gracefully ignore the error and navigate to the IDE page.
+        navigate(`/kits/${kitId}/workspace`);
+      } else {
+        alert(error.response.data["title"]);
+      }
+    }
+  }
   return (
     <div className={styles["section-card"]} style={{ marginBottom: "24px" }}>
       <div className={styles["section-header"]}>
@@ -23,7 +52,12 @@ export default function Progress({ projects }) {
         </div>
       ) : (
         projects.map((project, idx) => (
-          <div key={idx} className={styles["kit-item"]}>
+          <div
+            key={idx}
+            data-id={project.kitId}
+            className={styles["kit-item"]}
+            onClick={handleClickProject}
+          >
             <div
               className={styles["kit-thumbnail"]}
               style={{
