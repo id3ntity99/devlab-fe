@@ -1,12 +1,12 @@
 import styles from "./NavBar.module.css";
 
-export default function NavBar() {
+export default function NavBar({ title, stepNum }) {
   return (
     <div className={styles["top-bar"]}>
       <div className={styles["logo"]}>DevLab IDE</div>
       <div className={styles["project-info"]}>
         <span className={styles["project-title"]}>
-          실시간 채팅 앱 만들기 / Step 3: WebSocket 연결
+          Step {stepNum}: "{title}"
         </span>
       </div>
       <div className={styles["top-actions"]}>

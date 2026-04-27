@@ -5,11 +5,33 @@ import NavBar from "../components/ide/NavBar";
 import Terminal from "../components/ide/Terminal";
 import NavigationBar from "../components/landing/Navigation";
 import styles from "./Ide.module.css";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function Ide() {
+  const { kitId } = useParams();
+  const [problemData, setProblemData] = useState({});
+  useEffect(() => {
+    axios
+      .get(`http://localhost:8080/api/v1/kits/${kitId}/workspace`, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          setProblemData(response.data);
+        }
+      })
+      .catch((error) => {
+        alert(error.response.data.title);
+      });
+  }, [kitId]);
   return (
     <>
-      <NavBar />
+      <NavBar
+        title={problemData.currentProblem.title}
+        stepNum={problemData.currentProblem.stepNum}
+      />
       <div className={styles["main-layout"]}>
         <FileBrowser />
         <MyEditor />
