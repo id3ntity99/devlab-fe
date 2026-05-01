@@ -1,23 +1,42 @@
+import { Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
 
-export default function NavBar({ title, stepNum }) {
+export default function NavBar({
+  title,
+  stepNum,
+  isRunning = false,
+  onRun,
+  onSubmit,
+}) {
   return (
     <div className={styles["top-bar"]}>
-      <div className={styles["logo"]}>DevLab IDE</div>
+      <Link to="/" className={styles["logo"]}>
+        DevLab IDE
+      </Link>
       <div className={styles["project-info"]}>
-        <span className={styles["project-title"]}>
-          Step {stepNum}: "{title}"
-        </span>
+        {title && (
+          <span className={styles["project-title"]}>
+            {stepNum != null ? `Step ${stepNum}: ` : ""}
+            {title}
+          </span>
+        )}
       </div>
       <div className={styles["top-actions"]}>
-        <button className={styles["btn-icon"]} title="설정">
-          ⚙️
+        <button
+          type="button"
+          className={`${styles["btn"]} ${styles["btn-primary"]}`}
+          onClick={onRun}
+          disabled={isRunning}
+        >
+          {isRunning ? "⏳ 실행 중" : "▶ 실행"}
         </button>
-        <button className={styles["btn-icon"]} title="도움말">
-          ?
-        </button>
-        <button className={`${styles["btn"]} ${styles["btn-success"]}`}>
-          ✓ 완료하기
+        <button
+          type="button"
+          className={`${styles["btn"]} ${styles["btn-success"]}`}
+          onClick={onSubmit}
+          disabled={isRunning}
+        >
+          ✓ 제출하기
         </button>
       </div>
     </div>

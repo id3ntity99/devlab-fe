@@ -1,48 +1,95 @@
 /* Terminal */
 .terminal-panel {
-  height: 250px;
-  max-height: 60%;
-  background: var(--bg-primary);
+  flex: 1;
+  min-height: 200px;
+  background: #1e1e1e;
   border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .terminal-header {
   background: var(--bg-secondary);
-  padding: 8px 16px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--border);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-shrink: 0;
+}
+
+.terminal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .terminal-title {
   font-size: 13px;
   font-weight: 600;
   color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.terminal-content {
-  height: calc(100% - 40px);
-  padding: 12px;
-  overflow-y: auto;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 13px;
-  line-height: 1.5;
+.status-pill {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 500;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
 }
 
-.terminal-line {
-  color: var(--text-secondary);
-  margin-bottom: 4px;
-}
-
-.terminal-line.success {
+.status-open {
+  background: rgba(16, 185, 129, 0.12);
   color: var(--success);
 }
 
-.terminal-line.error {
+.status-connecting {
+  background: rgba(245, 158, 11, 0.12);
+  color: var(--warning);
+}
+
+.status-error,
+.status-closed {
+  background: rgba(239, 68, 68, 0.12);
   color: var(--error);
 }
 
-.terminal-prompt {
-  color: var(--primary);
+.terminal-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.term-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.term-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--border);
+}
+
+.terminal-content {
+  flex: 1;
+  min-height: 0;
+  padding: 6px 4px 6px 8px;
+  overflow: hidden;
+  background: #1e1e1e;
+}
+
+.terminal-content :global(.xterm),
+.terminal-content :global(.xterm-viewport),
+.terminal-content :global(.xterm-screen) {
+  height: 100% !important;
+  width: 100% !important;
 }

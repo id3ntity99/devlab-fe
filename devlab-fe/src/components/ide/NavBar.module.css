@@ -8,6 +8,7 @@
   align-items: center;
   padding: 0 16px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
 }
 
 .logo {
@@ -17,43 +18,31 @@
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-decoration: none;
 }
 
 .project-info {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex: 1;
+  justify-content: center;
+  min-width: 0;
 }
 
 .project-title {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .top-actions {
   display: flex;
   gap: 8px;
   align-items: center;
-}
-
-.btn-icon {
-  width: 36px;
-  height: 36px;
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 18px;
-}
-
-.btn-icon:hover {
-  background: var(--bg-primary);
-  border-color: var(--primary);
 }
 
 .btn {
@@ -67,6 +56,12 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  font-family: inherit;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 .btn-primary {
@@ -74,11 +69,15 @@
   color: white;
 }
 
-.btn-primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: var(--primary-dark);
 }
 
 .btn-success {
   background: var(--success);
   color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  filter: brightness(0.95);
 }
