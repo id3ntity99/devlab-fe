@@ -15,6 +15,7 @@ import {
   snapshotToFiles,
 } from "../components/ide/fileTree";
 import styles from "./Ide.module.css";
+import "./Ide.css";
 
 const API_BASE = "http://localhost:8080/api/v1";
 
@@ -115,7 +116,9 @@ export default function Ide() {
       ...prev,
       [fullPath]: { content: "", isReadOnly: false },
     }));
-    setOpenTabs((prev) => (prev.includes(fullPath) ? prev : [...prev, fullPath]));
+    setOpenTabs((prev) =>
+      prev.includes(fullPath) ? prev : [...prev, fullPath],
+    );
     setActivePath(fullPath);
   };
 
@@ -148,14 +151,16 @@ export default function Ide() {
     setOpenTabs((prev) =>
       prev.map((p) => {
         if (p === oldPath) return newPath;
-        if (p.startsWith(oldPath + "/")) return newPath + p.slice(oldPath.length);
+        if (p.startsWith(oldPath + "/"))
+          return newPath + p.slice(oldPath.length);
         return p;
       }),
     );
     setActivePath((prev) => {
       if (!prev) return prev;
       if (prev === oldPath) return newPath;
-      if (prev.startsWith(oldPath + "/")) return newPath + prev.slice(oldPath.length);
+      if (prev.startsWith(oldPath + "/"))
+        return newPath + prev.slice(oldPath.length);
       return prev;
     });
   };
@@ -175,7 +180,9 @@ export default function Ide() {
     );
     setFiles(nextFiles);
     setFolders(nextFolders);
-    setOpenTabs((prev) => prev.filter((p) => p !== target && !p.startsWith(target + "/")));
+    setOpenTabs((prev) =>
+      prev.filter((p) => p !== target && !p.startsWith(target + "/")),
+    );
     setActivePath((prev) => {
       if (!prev) return prev;
       if (prev === target || prev.startsWith(target + "/")) {
@@ -192,7 +199,9 @@ export default function Ide() {
     const term = terminalRef.current;
     if (!term) return;
     if (!term.isOpen()) {
-      term.writeLine("\x1b[33m콘솔이 아직 연결되지 않았습니다. 잠시 후 다시 시도하세요.\x1b[0m");
+      term.writeLine(
+        "\x1b[33m콘솔이 아직 연결되지 않았습니다. 잠시 후 다시 시도하세요.\x1b[0m",
+      );
       return;
     }
     setIsRunning(true);
@@ -211,7 +220,7 @@ export default function Ide() {
     setIsRunning(true);
     axios
       .post(
-        `${API_BASE}/kits/${kitId}/submissions`,
+        `${API_BASE}/kits/${kitId}/submissions`, //FIXME Check API spec and modify the URI
         {
           problemId: problem.problemId,
           snapshot: filesToSnapshot(files),
@@ -224,11 +233,16 @@ export default function Ide() {
         if (passed) {
           window.alert("정답입니다! 🎉");
         } else {
-          window.alert(data.message || "아직 정답이 아닙니다. 다시 시도해 보세요.");
+          window.alert(
+            data.message || "아직 정답이 아닙니다. 다시 시도해 보세요.",
+          );
         }
       })
       .catch((error) => {
-        const title = error?.response?.data?.title || error?.message || "제출에 실패했습니다.";
+        const title =
+          error?.response?.data?.title ||
+          error?.message ||
+          "제출에 실패했습니다.";
         window.alert(title);
       })
       .finally(() => setIsRunning(false));
@@ -236,7 +250,9 @@ export default function Ide() {
 
   if (loading) {
     return (
-      <div className={styles["page-loading"]}>워크스페이스를 불러오는 중...</div>
+      <div className={styles["page-loading"]}>
+        워크스페이스를 불러오는 중...
+      </div>
     );
   }
 
@@ -308,4 +324,3 @@ export default function Ide() {
     </div>
   );
 }
-

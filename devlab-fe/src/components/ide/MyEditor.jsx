@@ -53,11 +53,14 @@ export default function MyEditor({
             path={activePath}
             language={language}
             value={activeFile.content}
+            className="my-editor"
             onChange={(value) => {
               if (!activeFile.isReadOnly) {
                 onChangeContent?.(activePath, value ?? "");
               }
             }}
+            height="100%"
+            width="100%"
             options={{
               readOnly: !!activeFile.isReadOnly,
               fontSize: 14,
