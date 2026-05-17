@@ -9,21 +9,16 @@ import Terminal from "../components/ide/Terminal";
 import {
   buildTree,
   deletePath,
-  filesToSnapshot,
   movePath,
   pathExists,
   snapshotToFiles,
 } from "../components/ide/fileTree";
+import { Client } from "@stomp/stompjs";
 import styles from "./Ide.module.css";
 import "./Ide.css";
 
 const API_BASE = "http://localhost:8080/api/v1";
-
-function buildWsUrl(kitId) {
-  // Convert the http(s) base into ws(s) and append the workspace logs path.
-  const base = API_BASE.replace(/^http/, "ws");
-  return `${base}/kits/${kitId}/workspace/logs`;
-}
+const WS_BASE = "ws://localhost:8080/ws-devlab/websocket";
 
 export default function Ide() {
   const { kitId } = useParams();
@@ -42,7 +37,6 @@ export default function Ide() {
   // Loading is derived: we're loading whenever the data on screen doesn't
   // match the kit id from the URL and we don't already have an error.
   const loading = loadedKitId !== kitId && !loadError;
-  const wsUrl = kitId ? buildWsUrl(kitId) : null;
 
   // Fetch the workspace snapshot.
   useEffect(() => {
@@ -195,57 +189,63 @@ export default function Ide() {
     });
   };
 
-  const handleRun = () => {
-    const term = terminalRef.current;
-    if (!term) return;
-    if (!term.isOpen()) {
-      term.writeLine(
-        "\x1b[33m콘솔이 아직 연결되지 않았습니다. 잠시 후 다시 시도하세요.\x1b[0m",
-      );
-      return;
-    }
-    setIsRunning(true);
-    term.runCode({
-      kitId,
-      problemId: problem?.problemId,
-      snapshot: filesToSnapshot(files),
+  const connectStomp = (term, ticketId) => {
+    const stompClient = new Client({
+      brokerURL: WS_BASE,
+      reconnectDelay: 0,
+      debug: (str) => {
+        console.log("[DEBUG] " + str); //FIXME Delete this console-logging
+      },
+      onConnect: () => {
+        term.writeLine("\x1b[33m콘솔 연결 완료\n\x1b[0m");
+        stompClient.subscribe(`/topic/submissions/${ticketId}`, (message) => {
+          const messageBody = JSON.parse(message.body);
+          if (messageBody.logType === "EOF") {
+            stompClient.deactivate();
+            //TODO: Send HTTP request for submission result and according to the result, enable the "next step" button.
+          }
+          term.writeLine(messageBody);
+        });
+        stompClient.publish({
+          destination: "/app/workspace/run",
+          body: JSON.stringify({}),
+        });
+      },
+      onStompError: (frame) => {
+        alert("[에러] " + frame);
+      },
     });
-    // The server should send a `{type: "end"}` frame; we relax the running
-    // state after a short window in case it doesn't (so the UI never sticks).
-    window.setTimeout(() => setIsRunning(false), 8000);
+
+    stompClient.activate();
   };
 
-  const handleSubmit = () => {
-    if (!problem) return;
-    setIsRunning(true);
-    axios
-      .post(
-        `${API_BASE}/kits/${kitId}/submissions`, //FIXME Check API spec and modify the URI
+  const requestTicketId = async () => {
+    let ticketId = "";
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/v1/kits/${kitId}/workspace/ticket`,
         {
-          problemId: problem.problemId,
-          snapshot: filesToSnapshot(files),
+          withCredentials: true,
         },
-        { withCredentials: true },
-      )
-      .then((response) => {
-        const data = response.data || {};
-        const passed = data.passed ?? data.success;
-        if (passed) {
-          window.alert("정답입니다! 🎉");
-        } else {
-          window.alert(
-            data.message || "아직 정답이 아닙니다. 다시 시도해 보세요.",
-          );
-        }
-      })
-      .catch((error) => {
-        const title =
-          error?.response?.data?.title ||
-          error?.message ||
-          "제출에 실패했습니다.";
-        window.alert(title);
-      })
-      .finally(() => setIsRunning(false));
+      );
+      ticketId = response.data.ticketId;
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        alert(
+          `[${err.response.status}] 문제가 발생하였습니다. 잠시 후 다시 시도하세요.`,
+        );
+      }
+    }
+    return ticketId;
+  };
+
+  // This function is called when the execution button is clicked.
+  const handleRun = async () => {
+    const term = terminalRef.current;
+    term.writeLine("\x1b[33m콘솔 연결 중...\x1b[0m");
+    const ticketId = await requestTicketId();
+    connectStomp(term, ticketId);
+    setIsRunning(true);
   };
 
   if (loading) {
@@ -271,7 +271,6 @@ export default function Ide() {
         stepNum={problem?.stepNum}
         isRunning={isRunning}
         onRun={handleRun}
-        onSubmit={handleSubmit}
       />
       <div className={styles["main-layout"]}>
         <FileBrowser
@@ -293,7 +292,7 @@ export default function Ide() {
         />
         <aside className={styles["right-sidebar"]}>
           <InstructionPanel problem={problem} />
-          <Terminal ref={terminalRef} wsUrl={wsUrl} />
+          <Terminal ref={terminalRef} />
         </aside>
       </div>
       <div className={styles["bottom-bar"]}>

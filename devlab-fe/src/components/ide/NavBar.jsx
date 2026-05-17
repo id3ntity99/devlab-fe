@@ -1,13 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./NavBar.module.css";
 
-export default function NavBar({
-  title,
-  stepNum,
-  isRunning = false,
-  onRun,
-  onSubmit,
-}) {
+export default function NavBar({ title, stepNum, isRunning = false, onRun }) {
   return (
     <div className={styles["top-bar"]}>
       <Link to="/" className={styles["logo"]}>
@@ -29,14 +23,6 @@ export default function NavBar({
           disabled={isRunning}
         >
           {isRunning ? "⏳ 실행 중" : "▶ 실행"}
-        </button>
-        <button
-          type="button"
-          className={`${styles["btn"]} ${styles["btn-success"]}`}
-          onClick={onSubmit}
-          disabled={isRunning}
-        >
-          ✓ 제출하기
         </button>
       </div>
     </div>

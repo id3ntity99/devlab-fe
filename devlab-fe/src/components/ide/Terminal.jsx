@@ -1,4 +1,4 @@
-import { useEffect, useImperativeHandle, useRef, useState } from "react";
+import { useEffect, useImperativeHandle, useRef } from "react";
 import { Terminal as XTerm } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
@@ -21,13 +21,10 @@ const STATUS_TEXT = {
   error: "오류",
 };
 
-export default function Terminal({ wsUrl, ref }) {
+export default function Terminal({ ref }) {
   const containerRef = useRef(null);
   const termRef = useRef(null);
   const fitRef = useRef(null);
-  const wsRef = useRef(null);
-  const pendingRef = useRef([]);
-  const [status, setStatus] = useState("idle");
 
   // Initialize xterm once.
   useEffect(() => {
@@ -58,7 +55,9 @@ export default function Terminal({ wsUrl, ref }) {
     termRef.current = term;
     fitRef.current = fit;
 
-    term.writeln(`${ANSI.gray}DevLab Console — 실행 결과가 여기에 표시됩니다.${ANSI.reset}`);
+    term.writeln(
+      `${ANSI.gray}DevLab Console — 실행 결과가 여기에 표시됩니다.${ANSI.reset}`,
+    );
 
     const observer = new ResizeObserver(() => {
       try {
@@ -77,113 +76,20 @@ export default function Terminal({ wsUrl, ref }) {
     };
   }, []);
 
-  // (Re)connect when wsUrl changes.
-  useEffect(() => {
-    if (!wsUrl) return undefined;
-    if (wsRef.current) {
-      wsRef.current.close();
-      wsRef.current = null;
-    }
+  const handleClear = () => termRef.current?.clear();
 
-    setStatus("connecting");
-    let ws;
-    try {
-      ws = new WebSocket(wsUrl);
-    } catch {
-      setStatus("error");
-      writeToTerm(`${ANSI.red}WebSocket 연결을 생성할 수 없습니다.${ANSI.reset}`);
-      return undefined;
-    }
-    wsRef.current = ws;
-
-    ws.onopen = () => {
-      setStatus("open");
-      writeToTerm(`${ANSI.gray}[연결됨] ${wsUrl}${ANSI.reset}`);
-      const queued = pendingRef.current;
-      pendingRef.current = [];
-      for (const msg of queued) ws.send(msg);
-    };
-    ws.onmessage = (event) => {
-      handleIncoming(event.data);
-    };
-    ws.onerror = () => {
-      setStatus("error");
-      writeToTerm(`${ANSI.red}[오류] WebSocket 통신 중 문제가 발생했습니다.${ANSI.reset}`);
-    };
-    ws.onclose = () => {
-      setStatus("closed");
-      writeToTerm(`${ANSI.gray}[연결 끊김]${ANSI.reset}`);
-    };
-
-    return () => {
-      ws.close();
-      if (wsRef.current === ws) wsRef.current = null;
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [wsUrl]);
-
-  const writeToTerm = (text) => {
+  const writeToTerm = (message) => {
     const term = termRef.current;
     if (!term) return;
-    term.writeln(text);
-  };
-
-  const handleIncoming = (data) => {
-    if (typeof data !== "string") {
-      writeToTerm(String(data));
+    const logType = message.logType;
+    const content = message.logContent;
+    if (!content) {
       return;
     }
-    let parsed = null;
-    if (data.length > 0 && (data[0] === "{" || data[0] === "[")) {
-      try {
-        parsed = JSON.parse(data);
-      } catch {
-        parsed = null;
-      }
-    }
-    if (!parsed) {
-      writeToTerm(data);
-      return;
-    }
-    const items = Array.isArray(parsed) ? parsed : [parsed];
-    for (const item of items) {
-      writeFrame(item);
-    }
-  };
-
-  const writeFrame = (frame) => {
-    if (typeof frame === "string") {
-      writeToTerm(frame);
-      return;
-    }
-    const line =
-      frame.line ?? frame.message ?? frame.text ?? frame.data ?? "";
-    const level = (frame.level || frame.type || "").toLowerCase();
-    let prefix = "";
-    if (level === "stderr" || level === "error") prefix = ANSI.red;
-    else if (level === "stdout") prefix = "";
-    else if (level === "success") prefix = ANSI.green;
-    else if (level === "warn" || level === "warning") prefix = ANSI.yellow;
-    else if (level === "info") prefix = ANSI.cyan;
-
-    if (level === "end" || frame.type === "end") {
-      const code = frame.exitCode ?? frame.code;
-      writeToTerm(
-        `${ANSI.gray}[종료${code != null ? ` · code ${code}` : ""}]${ANSI.reset}`,
-      );
-      return;
-    }
-
-    writeToTerm(prefix ? `${prefix}${line}${ANSI.reset}` : String(line));
-  };
-
-  const send = (payload) => {
-    const json = typeof payload === "string" ? payload : JSON.stringify(payload);
-    const ws = wsRef.current;
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(json);
+    if (logType === "EOF") {
+      term.write(`${ANSI.cyan}${content}${ANSI.reset}`);
     } else {
-      pendingRef.current.push(json);
+      term.write(content);
     }
   };
 
@@ -194,39 +100,9 @@ export default function Terminal({ wsUrl, ref }) {
         termRef.current?.clear();
       },
       writeLine: (text) => writeToTerm(text),
-      runCode: (payload) => {
-        termRef.current?.clear();
-        writeToTerm(`${ANSI.cyan}▶ 실행 요청 전송...${ANSI.reset}`);
-        send({ type: "run", payload });
-      },
-      isOpen: () => wsRef.current?.readyState === WebSocket.OPEN,
     }),
     [],
   );
-
-  const handleClear = () => termRef.current?.clear();
-  const handleReconnect = () => {
-    const ws = wsRef.current;
-    if (ws) ws.close();
-    // Force re-run of the wsUrl effect by toggling status; simplest approach
-    // is to ask the parent to bump the URL. As a pragmatic local fallback,
-    // open a fresh socket directly.
-    if (!wsUrl) return;
-    setStatus("connecting");
-    try {
-      const newWs = new WebSocket(wsUrl);
-      wsRef.current = newWs;
-      newWs.onopen = () => {
-        setStatus("open");
-        writeToTerm(`${ANSI.gray}[재연결됨]${ANSI.reset}`);
-      };
-      newWs.onmessage = (e) => handleIncoming(e.data);
-      newWs.onerror = () => setStatus("error");
-      newWs.onclose = () => setStatus("closed");
-    } catch {
-      setStatus("error");
-    }
-  };
 
   return (
     <div className={styles["terminal-panel"]}>
@@ -247,14 +123,6 @@ export default function Terminal({ wsUrl, ref }) {
             title="콘솔 비우기"
           >
             🗑️
-          </button>
-          <button
-            type="button"
-            className={styles["term-btn"]}
-            onClick={handleReconnect}
-            title="재연결"
-          >
-            ⟲
           </button>
         </div>
       </div>
